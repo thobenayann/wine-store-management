@@ -1,6 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardFooter, CardHeader } from '../ui/card';
+import { Separator } from '../ui/separator';
 import BackButton from './back-button';
 import Header from './header';
 import Social from './social';
@@ -13,7 +14,7 @@ interface CardWrapperProps {
     showSocial?: boolean;
 }
 
-function cardWrapper({
+function CardWrapper({
     children,
     headerLabel,
     showSocial,
@@ -27,7 +28,8 @@ function cardWrapper({
             </CardHeader>
             <CardContent>{children}</CardContent>
             {showSocial ? (
-                <CardFooter>
+                <CardFooter className='flex flex-col space-y-2'>
+                    <Separator />
                     <Social />
                 </CardFooter>
             ) : null}
@@ -38,4 +40,4 @@ function cardWrapper({
     );
 }
 
-export default cardWrapper;
+export default CardWrapper;
