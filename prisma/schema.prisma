@@ -1,0 +1,131 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+
+model Wine {
+  id          String   @id @default(uuid())
+  name        String
+  region      String
+  year        Int
+  price       Float
+  stock       BigInt
+  stock_alert BigInt
+
+  Discounts   Discount[]
+  InvoicesLines InvoiceLine[]
+}
+
+model InvoiceLine {
+  id         String   @id @default(uuid())
+  quantity   Int
+  unit_price Float
+  total      Float
+  discount   Int?
+  invoice_id String
+  wine_id    String
+
+  invoice    Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  wine       Wine    @relation(fields: [wine_id], references: [id], onDelete: Cascade)
+
+  @@index([invoice_id], name: "invoices_lines_invoice_id_index")
+  @@index([wine_id], name: "invoices_lines_wine_id_index")
+}
+
+model Discount {
+  id             String   @id @default(uuid())
+  quantity_min   Int
+  discount_amount Int
+  wine_id        String
+  customer_id    String
+
+  wine           Wine     @relation(fields: [wine_id], references: [id], onDelete: Cascade)
+  customer       Customer @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+
+  @@index([wine_id], name: "discounts_wine_id_index")
+  @@index([customer_id], name: "discounts_customer_id_index")
+}
+
+model Customer {
+  id           String   @id @default(uuid())
+  first_name   String
+  last_name    String
+  email        String   @unique
+  phone        String
+  adresse      String
+  company      String?
+  customer_of  String
+
+  discounts    Discount[]
+  invoices     Invoice[]
+  user         User     @relation(fields: [customer_of], references: [id], onDelete: Cascade)
+
+  @@index([customer_of], name: "customers_customer_of_index")
+}
+
+model Invoice {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  reference  String
+  due_date   DateTime
+  status     String
+
+  author_id  String
+  client_id  String
+
+  author     User     @relation(fields: [author_id], references: [id], onDelete: Cascade)
+  client     Customer @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  lines      InvoiceLine[]
+
+  @@index([author_id], name: "invoices_author_id_index")
+  @@index([client_id], name: "invoices_client_id_index")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  first_name    String
+  last_name     String
+  email         String   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String
+  role          String
+
+  accounts      Account[]
+  customers     Customer[]
+  invoices      Invoice[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
