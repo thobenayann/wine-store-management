@@ -1,7 +1,7 @@
 'use client';
 
-import { login } from '@/actions/login';
-import { LoginSchema } from '@/schemas';
+import { register } from '@/actions/register';
+import { RegisterSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useTransition } from 'react';
 import { useForm as Useform } from 'react-hook-form';
@@ -20,25 +20,25 @@ import {
 import { Input } from '../ui/input';
 import CardWrapper from './card-wrapper';
 
-export default function LoginForm() {
+export default function RegisterForm() {
     const [error, setError] = useState<string | undefined>('');
     const [success, setSuccess] = useState<string | undefined>('');
     const [isPending, startTransition] = useTransition();
 
-    const form = Useform<z.infer<typeof LoginSchema>>({
-        resolver: zodResolver(LoginSchema),
+    const form = Useform<z.infer<typeof RegisterSchema>>({
+        resolver: zodResolver(RegisterSchema),
         defaultValues: {
             email: '',
             password: '',
         },
     });
 
-    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
         setError('');
         setSuccess('');
 
         startTransition(() => {
-            login(values).then((data) => {
+            register(values).then((data) => {
                 setError(data.error);
                 setSuccess(data.success);
             });
@@ -47,10 +47,10 @@ export default function LoginForm() {
 
     return (
         <CardWrapper
-            headerLabel={`Bon retour parmi nous ! 👋`}
-            headerTitle='Connexion'
-            backButtonLabel='Pas encore de compte ?'
-            backButtonHref='/auth/login'
+            headerLabel={`Créer un compte 🍷`}
+            headerTitle='Inscription'
+            backButtonLabel="J'ai déjà un compte."
+            backButtonHref='/auth/register'
             showSocial
         >
             <Form {...form}>
@@ -101,6 +101,50 @@ export default function LoginForm() {
                                 </FormItem>
                             )}
                         />
+                        {/* FIRST NAME Field */}
+                        <FormField
+                            control={form.control}
+                            name='firstName'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor='firstName'>
+                                        Prénom
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            id='firstName'
+                                            type='text'
+                                            placeholder='John'
+                                            disabled={isPending}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        {/* LAST NAME Field */}
+                        <FormField
+                            control={form.control}
+                            name='lastName'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor='lastName'>
+                                        Nom
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            id='lastName'
+                                            type='text'
+                                            placeholder='Doe'
+                                            disabled={isPending}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
                     {/* SUBMIT BUTTON */}
                     <Button
@@ -108,7 +152,7 @@ export default function LoginForm() {
                         className='w-full'
                         disabled={isPending}
                     >
-                        Se connecter
+                        Créer un compte
                     </Button>
                     <FormError message={error} />
                     <FormSucess message={success} />
