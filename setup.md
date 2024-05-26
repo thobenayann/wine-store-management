@@ -9,6 +9,6 @@
 -   Prisma Init : `npx prisma init`
 -   NextAuth Prisma adapter : `npm i @auth/prisma-adapter`
 -   Prisma first migration : `prisma migrate dev --name init`
--   Bcrypt : `npm i bcrypt`
--   Bcrypt types : `npm i -D @types/bcrypt`
+-   Bcrypt : `npm i bcryptjs`
+-   Bcrypt types : `npm i -D @types/bcryptjs`
 -   Install NextAuth 5 beta : `npm install next-auth@beta`
