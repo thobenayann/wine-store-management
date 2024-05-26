@@ -57,7 +57,7 @@ export default function LoginForm() {
             headerLabel={`Bon retour parmi nous ! 👋`}
             headerTitle='Connexion'
             backButtonLabel='Pas encore de compte ?'
-            backButtonHref='/auth/login'
+            backButtonHref='/auth/register'
             showSocial
         >
             <Form {...form}>

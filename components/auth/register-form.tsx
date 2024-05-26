@@ -50,7 +50,7 @@ export default function RegisterForm() {
             headerLabel={`Créer un compte 🍷`}
             headerTitle='Inscription'
             backButtonLabel="J'ai déjà un compte."
-            backButtonHref='/auth/register'
+            backButtonHref='/auth/login'
             showSocial
         >
             <Form {...form}>
