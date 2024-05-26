@@ -26,20 +26,124 @@ declare module 'next-auth' {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+    events: {
+        // Link the user provider account to the user account (on our DB)
+        linkAccount: async ({ user }) => {
+            await prisma.user.update({
+                where: { id: user.id },
+                data: { emailVerified: new Date() },
+            });
+        },
+    },
     callbacks: {
-        // async signIn({ user }) {
-        //     if (!user || !user.id) {
-        //         return false;
-        //     }
+        async signIn({ user, account, profile }) {
+            // Gestion de l'authentification Google
+            if (account?.provider === 'google' && profile) {
+                const email = profile.email as string;
+                const firstName = profile.given_name || '';
+                const lastName = profile.family_name || '';
 
-        //     const existingUser = await getUserById(user.id);
+                // Vérifier si l'utilisateur existe déjà dans la base de données
+                let existingUser = await prisma.user.findUnique({
+                    where: { email },
+                });
 
-        //     if (!existingUser || !existingUser.emailVerified) {
-        //         return false;
-        //     }
+                // Si l'utilisateur n'existe pas, le créer
+                if (!existingUser) {
+                    existingUser = await prisma.user.create({
+                        data: {
+                            email,
+                            first_name: firstName,
+                            last_name: lastName,
+                            image: profile.picture,
+                            emailVerified: new Date(),
+                            password: '',
+                        },
+                    });
+                } else {
+                    // Si l'utilisateur existe, mettre à jour ses informations
+                    existingUser = await prisma.user.update({
+                        where: { email },
+                        data: {
+                            first_name: firstName,
+                            last_name: lastName,
+                            image: profile.picture,
+                        },
+                    });
+                }
 
-        //     return true;
-        // },
+                // Préparer les données du compte OAuth
+                const accountData = {
+                    provider: account.provider,
+                    type: account.type,
+                    providerAccountId: account.providerAccountId,
+                    access_token: account.access_token,
+                    expires_at: account.expires_at,
+                    token_type: account.token_type,
+                    scope: account.scope,
+                    id_token: account.id_token,
+                    userId: existingUser.id,
+                };
+
+                // Vérifier si le compte OAuth existe déjà
+                const existingAccount = await prisma.account.findUnique({
+                    where: {
+                        provider_providerAccountId: {
+                            provider: account.provider,
+                            providerAccountId: account.providerAccountId,
+                        },
+                    },
+                });
+
+                // Si le compte OAuth n'existe pas, le créer
+                if (!existingAccount) {
+                    await prisma.account.create({
+                        data: accountData,
+                    });
+                } else {
+                    // Si le compte OAuth existe, mettre à jour ses informations
+                    await prisma.account.update({
+                        where: {
+                            provider_providerAccountId: {
+                                provider: account.provider,
+                                providerAccountId: account.providerAccountId,
+                            },
+                        },
+                        data: accountData,
+                    });
+                }
+
+                // Associer l'utilisateur à l'ID de l'utilisateur existant
+                user.id = existingUser.id;
+                return true; // Autoriser la connexion pour Google
+            }
+
+            // Gestion de l'authentification par identifiants (Credentials)
+            if (account?.provider === 'credentials') {
+                if (!user.id) {
+                    return false; // Refuser la connexion si l'utilisateur n'a pas d'ID
+                }
+
+                const existingUser = await getUserById(user.id);
+
+                // Vérifier que l'utilisateur existe
+                if (!existingUser) {
+                    return false;
+                }
+
+                // Si l'email de l'utilisateur n'est pas vérifié, le mettre à jour
+                if (existingUser.emailVerified === null) {
+                    await prisma.user.update({
+                        where: { id: user.id },
+                        data: { emailVerified: new Date() },
+                    });
+                }
+
+                return true; // Autoriser la connexion pour Credentials
+            }
+
+            return false; // Refuser la connexion si aucune condition n'est remplie
+        },
         async session({ token, session }) {
             // add the user id to the session (custom field)
             if (token.sub && session.user) {
