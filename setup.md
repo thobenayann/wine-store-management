@@ -11,3 +11,4 @@
 -   Prisma first migration : `prisma migrate dev --name init`
 -   Bcrypt : `npm i bcrypt`
 -   Bcrypt types : `npm i -D @types/bcrypt`
+-   Install NextAuth 5 beta : `npm install next-auth@beta`
