@@ -6,7 +6,7 @@ export const publicRoutes = ['/', '/auth/verify'];
 
 /**
  * An array of routes that require authentication.
- * These routes will redirect logged in users to /settings.
+ * These routes will redirect logged in users to /dashboard.
  * @type {string[]}
  */
 export const authRoutes = [
@@ -28,4 +28,4 @@ export const apiAuthPrefix = '/api/auth';
  * The default redirect path after a successful login.
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = '/settings';
+export const DEFAULT_LOGIN_REDIRECT = '/dashboard';
