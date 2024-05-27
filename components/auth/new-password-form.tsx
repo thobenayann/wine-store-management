@@ -1,9 +1,9 @@
 'use client';
 
-import { login } from '@/actions/login';
-import { LoginSchema } from '@/schemas';
+import { newPassword } from '@/actions/new-password';
+import { NewPasswordSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useForm as Useform } from 'react-hook-form';
 import { z } from 'zod';
@@ -21,40 +21,39 @@ import {
 import { Input } from '../ui/input';
 import CardWrapper from './card-wrapper';
 
-export default function LoginForm() {
+export default function NewPasswordForm() {
     const [error, setError] = useState<string | undefined>('');
     const [success, setSuccess] = useState<string | undefined>('');
     const [isPending, startTransition] = useTransition();
 
-    const form = Useform<z.infer<typeof LoginSchema>>({
-        resolver: zodResolver(LoginSchema),
+    const searhParams = useSearchParams();
+    const token = searhParams.get('token');
+
+    const form = Useform<z.infer<typeof NewPasswordSchema>>({
+        resolver: zodResolver(NewPasswordSchema),
         defaultValues: {
-            email: '',
             password: '',
         },
     });
 
-    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
         setError('');
         setSuccess('');
 
         startTransition(() => {
-            login(values).then((data) => {
-                if (data) {
-                    setError(data?.error);
-                    setSuccess(data?.success);
-                }
+            newPassword(values, token).then((data) => {
+                setError(data.error);
+                setSuccess(data.success);
             });
         });
     };
 
     return (
         <CardWrapper
-            headerLabel={`Bon retour parmi nous ! 👋`}
-            headerTitle='Connexion'
-            backButtonLabel='Pas encore de compte ?'
-            backButtonHref='/auth/register'
-            showSocial
+            headerLabel={`Saisir un nouveau mot de passe`}
+            headerTitle='Mot de passe 🔑'
+            backButtonLabel='Retour à la connexion'
+            backButtonHref='/auth/login'
         >
             <Form {...form}>
                 <form
@@ -62,26 +61,6 @@ export default function LoginForm() {
                     className='space-y-6'
                 >
                     <div className='space-y-4'>
-                        {/* EMAIL Field */}
-                        <FormField
-                            control={form.control}
-                            name='email'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor='email'>Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            id='email'
-                                            type='email'
-                                            placeholder='john.doe@example.com'
-                                            disabled={isPending}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
                         {/* PASSWORD Field */}
                         <FormField
                             control={form.control}
@@ -100,16 +79,6 @@ export default function LoginForm() {
                                             disabled={isPending}
                                         />
                                     </FormControl>
-                                    <Button
-                                        size='sm'
-                                        variant='link'
-                                        asChild
-                                        className='px-0 font-normal'
-                                    >
-                                        <Link href='/auth/reset-password'>
-                                            Mot de passe oublié ?
-                                        </Link>
-                                    </Button>
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -121,7 +90,7 @@ export default function LoginForm() {
                         className='w-full'
                         disabled={isPending}
                     >
-                        Se connecter
+                        Modifier le mot de passe
                     </Button>
                     <FormError message={error} />
                     <FormSucess message={success} />

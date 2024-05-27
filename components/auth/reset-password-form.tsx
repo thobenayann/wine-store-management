@@ -1,9 +1,8 @@
 'use client';
 
-import { login } from '@/actions/login';
-import { LoginSchema } from '@/schemas';
+import { resetPassword } from '@/actions/reset-password';
+import { ResetPasswordSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
 import { useState, useTransition } from 'react';
 import { useForm as Useform } from 'react-hook-form';
 import { z } from 'zod';
@@ -21,25 +20,26 @@ import {
 import { Input } from '../ui/input';
 import CardWrapper from './card-wrapper';
 
-export default function LoginForm() {
+export default function ResetPasswordForm() {
     const [error, setError] = useState<string | undefined>('');
     const [success, setSuccess] = useState<string | undefined>('');
     const [isPending, startTransition] = useTransition();
 
-    const form = Useform<z.infer<typeof LoginSchema>>({
-        resolver: zodResolver(LoginSchema),
+    const form = Useform<z.infer<typeof ResetPasswordSchema>>({
+        resolver: zodResolver(ResetPasswordSchema),
         defaultValues: {
             email: '',
-            password: '',
         },
     });
 
-    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    const onSubmit = (values: z.infer<typeof ResetPasswordSchema>) => {
         setError('');
         setSuccess('');
 
+        console.log('values', values);
+
         startTransition(() => {
-            login(values).then((data) => {
+            resetPassword(values).then((data) => {
                 if (data) {
                     setError(data?.error);
                     setSuccess(data?.success);
@@ -50,11 +50,10 @@ export default function LoginForm() {
 
     return (
         <CardWrapper
-            headerLabel={`Bon retour parmi nous ! 👋`}
-            headerTitle='Connexion'
-            backButtonLabel='Pas encore de compte ?'
-            backButtonHref='/auth/register'
-            showSocial
+            headerLabel={`Mot de passe oublié? 😢`}
+            headerTitle='Mot de passe'
+            backButtonLabel='Retour à la connexion'
+            backButtonHref='/auth/login'
         >
             <Form {...form}>
                 <form
@@ -82,38 +81,6 @@ export default function LoginForm() {
                                 </FormItem>
                             )}
                         />
-                        {/* PASSWORD Field */}
-                        <FormField
-                            control={form.control}
-                            name='password'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor='password'>
-                                        Mot de passe
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            id='password'
-                                            type='password'
-                                            placeholder='******'
-                                            disabled={isPending}
-                                        />
-                                    </FormControl>
-                                    <Button
-                                        size='sm'
-                                        variant='link'
-                                        asChild
-                                        className='px-0 font-normal'
-                                    >
-                                        <Link href='/auth/reset-password'>
-                                            Mot de passe oublié ?
-                                        </Link>
-                                    </Button>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
                     </div>
                     {/* SUBMIT BUTTON */}
                     <Button
@@ -121,7 +88,7 @@ export default function LoginForm() {
                         className='w-full'
                         disabled={isPending}
                     >
-                        Se connecter
+                        Envoyer un mail de réinitialisation
                     </Button>
                     <FormError message={error} />
                     <FormSucess message={success} />

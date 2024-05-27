@@ -23,3 +23,15 @@ export const RegisterSchema = z.object({
         message: 'Un nom est requis',
     }),
 });
+
+export const ResetPasswordSchema = z.object({
+    email: z.string().email({
+        message: 'Veuillez rentrer une adresse email valide',
+    }),
+});
+
+export const NewPasswordSchema = z.object({
+    password: z.string().min(6, {
+        message: 'Le mot de passe doit détenir 6 caractères minimum',
+    }),
+});
