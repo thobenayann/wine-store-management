@@ -37,8 +37,6 @@ export default function ResetPasswordForm() {
         setError('');
         setSuccess('');
 
-        console.log('values', values);
-
         startTransition(() => {
             resetPassword(values).then((data) => {
                 if (data) {
