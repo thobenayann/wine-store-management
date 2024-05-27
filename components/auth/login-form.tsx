@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useState, useTransition } from 'react';
 import { useForm as Useform } from 'react-hook-form';
+import { BeatLoader } from 'react-spinners';
 import { z } from 'zod';
 import FormError from '../form-error';
 import FormSucess from '../form-success';
@@ -123,6 +124,9 @@ export default function LoginForm() {
                     >
                         Se connecter
                     </Button>
+                    <div className='flex justify-center'>
+                        {isPending && <BeatLoader />}
+                    </div>
                     <FormError message={error} />
                     <FormSucess message={success} />
                 </form>

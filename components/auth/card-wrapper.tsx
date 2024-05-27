@@ -24,7 +24,7 @@ function CardWrapper({
     backButtonHref,
 }: CardWrapperProps) {
     return (
-        <Card className='w-[400px] shadow-md'>
+        <Card className='w-full md:w-[400px] shadow-md m-4'>
             <CardHeader>
                 <Header label={headerLabel} title={headerTitle} />
             </CardHeader>

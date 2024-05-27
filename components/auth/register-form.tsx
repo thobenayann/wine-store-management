@@ -5,6 +5,7 @@ import { RegisterSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useTransition } from 'react';
 import { useForm as Useform } from 'react-hook-form';
+import { BeatLoader } from 'react-spinners';
 import { z } from 'zod';
 import FormError from '../form-error';
 import FormSucess from '../form-success';
@@ -30,6 +31,8 @@ export default function RegisterForm() {
         defaultValues: {
             email: '',
             password: '',
+            firstName: '',
+            lastName: '',
         },
     });
 
@@ -56,9 +59,9 @@ export default function RegisterForm() {
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className='space-y-6'
+                    className='space-y-4 md:space-y-6'
                 >
-                    <div className='space-y-4'>
+                    <div className='space-y-2 md:space-y-4'>
                         {/* EMAIL Field */}
                         <FormField
                             control={form.control}
@@ -154,6 +157,9 @@ export default function RegisterForm() {
                     >
                         Créer un compte
                     </Button>
+                    <div className='flex justify-center'>
+                        {isPending && <BeatLoader />}
+                    </div>
                     <FormError message={error} />
                     <FormSucess message={success} />
                 </form>
