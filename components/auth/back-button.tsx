@@ -11,11 +11,11 @@ interface BackButtonProps {
 function BackButton({ label, href }: BackButtonProps) {
     return (
         <Button
-            size='sm'
-            variant='link'
+            size="sm"
+            variant="link"
             asChild
             onClick={() => {}}
-            className='font-normal w-full text-white dark:text-gray-300 hover:text-gray-400 dark:hover:text-gray-200'
+            className="font-normal w-full text-gray-700 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-200"
         >
             <Link href={href}>{label}</Link>
         </Button>

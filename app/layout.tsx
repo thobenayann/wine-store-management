@@ -2,12 +2,18 @@ import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
-import { Inter as FontSans } from 'next/font/google';
+import { Inter as FontSans, Merriweather as FontSerif } from 'next/font/google';
 import './globals.css';
 
 const fontSans = FontSans({
     subsets: ['latin'],
     variable: '--font-sans',
+});
+
+const fontSerif = FontSerif({
+    subsets: ['latin'],
+    variable: '--font-serif',
+    weight: ['400', '700'],
 });
 
 export const metadata: Metadata = {
@@ -35,16 +41,17 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang='fr' suppressHydrationWarning>
+        <html lang="fr" suppressHydrationWarning>
             <body
                 className={cn(
                     'min-h-screen bg-background font-sans antialiased',
-                    fontSans.variable
+                    fontSans.variable,
+                    fontSerif.variable
                 )}
             >
                 <ThemeProvider
-                    attribute='class'
-                    defaultTheme='system'
+                    attribute="class"
+                    defaultTheme="system"
                     enableSystem
                     disableTransitionOnChange
                 >

@@ -52,30 +52,30 @@ export default function LoginForm() {
     return (
         <CardWrapper
             headerLabel={`Bon retour parmi nous ! 👋`}
-            headerTitle='Connexion'
-            backButtonLabel='Pas encore de compte ?'
-            backButtonHref='/auth/register'
+            headerTitle="Connexion"
+            backButtonLabel="Pas encore de compte ?"
+            backButtonHref="/auth/register"
             showSocial
         >
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className='space-y-6'
+                    className="space-y-6"
                 >
-                    <div className='space-y-4'>
+                    <div className="space-y-4">
                         {/* EMAIL Field */}
                         <FormField
                             control={form.control}
-                            name='email'
+                            name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor='email'>Email</FormLabel>
+                                    <FormLabel htmlFor="email">Email</FormLabel>
                                     <FormControl>
                                         <Input
                                             {...field}
-                                            id='email'
-                                            type='email'
-                                            placeholder='john.doe@example.com'
+                                            id="email"
+                                            type="email"
+                                            placeholder="john.doe@example.com"
                                             disabled={isPending}
                                         />
                                     </FormControl>
@@ -86,30 +86,30 @@ export default function LoginForm() {
                         {/* PASSWORD Field */}
                         <FormField
                             control={form.control}
-                            name='password'
+                            name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor='password'>
+                                    <FormLabel htmlFor="password">
                                         Mot de passe
                                     </FormLabel>
                                     <FormControl>
                                         <Input
                                             {...field}
-                                            id='password'
-                                            type='password'
-                                            placeholder='******'
+                                            id="password"
+                                            type="password"
+                                            placeholder="******"
                                             disabled={isPending}
                                         />
                                     </FormControl>
                                     <Button
-                                        size='sm'
-                                        variant='link'
+                                        size="sm"
+                                        variant="link"
                                         asChild
-                                        className='px-0 font-normal'
+                                        className="px-0 font-normal"
                                     >
                                         <Link
-                                            href='/auth/reset-password'
-                                            className='text-white dark:text-gray-300 hover:text-gray-400 dark:hover:text-gray-200'
+                                            href="/auth/reset-password"
+                                            className="text-gray-700 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-200"
                                         >
                                             Mot de passe oublié ?
                                         </Link>
@@ -121,13 +121,13 @@ export default function LoginForm() {
                     </div>
                     {/* SUBMIT BUTTON */}
                     <Button
-                        type='submit'
-                        className='w-full'
+                        type="submit"
+                        className="w-full"
                         disabled={isPending}
                     >
                         Se connecter
                     </Button>
-                    <div className='flex justify-center'>
+                    <div className="flex justify-center">
                         {isPending && <BeatLoader />}
                     </div>
                     <FormError message={error} />

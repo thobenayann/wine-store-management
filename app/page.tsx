@@ -6,36 +6,36 @@ import Image from 'next/image';
 
 export default function Home() {
     return (
-        <main className='flex h-full flex-col items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-800 to-black'>
-            <div className='space-y-6'></div>
-            <Spotlight fill='white' />
-            <div className='p-4 max-w-7xl mx-auto z-10 w-full pt-20 md:pt-0 flex flex-col items-center'>
-                <h1 className='text-4xl md:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50'>
-                    <span className='tracking-wider'>Bienvenue dans</span>
-                    <div className='bg-transparent bg-opacity-50 bg-clip-text text-transparent'>
+        <main className="flex h-full flex-col items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-800 to-black">
+            <div className=""></div>
+            <Spotlight fill="white" />
+            <div className="p-4 max-w-7xl mx-auto z-10 w-full flex flex-col items-center">
+                <h1 className="text-4xl md:text-7xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50 font-serif">
+                    <span className="tracking-wider">Bienvenue dans</span>
+                    <div className="bg-transparent bg-opacity-50 bg-clip-text text-transparent text-white">
                         <FlipText
-                            className='text-black dark:text-white bg-transparent bg-opacity-50 bg-clip-text text-transparent'
-                            word='Wine'
+                            className="text-white dark:text-white bg-transparent bg-opacity-50 bg-clip-text"
+                            word="Wine"
                         />
                         <FlipText
-                            className='text-black dark:text-white bg-transparent bg-opacity-50 bg-clip-text text-transparent'
-                            word='Store'
+                            className="text-white dark:text-white bg-transparent bg-opacity-50 bg-clip-text"
+                            word="Store"
                         />
                         <FlipText
-                            className='text-black dark:text-white bg-transparent bg-opacity-50 bg-clip-text text-transparent'
-                            word='Management'
+                            className="text-white dark:text-white bg-transparent bg-opacity-50 bg-clip-text"
+                            word="Management"
                         />
                     </div>
                 </h1>
                 <Image
-                    src='/gif/wired-flat-240-glass-of-wine.gif'
-                    alt='wine gif'
+                    src="/gif/wired-flat-240-glass-of-wine.gif"
+                    alt="wine gif"
                     width={240}
                     height={240}
                     unoptimized
                 />
                 <LoginButton>
-                    <Button className='inline-flex h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50'>
+                    <Button className="inline-flex h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
                         Connexion
                     </Button>
                 </LoginButton>
