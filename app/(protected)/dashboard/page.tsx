@@ -15,13 +15,16 @@ import { ModeToggle } from '@/components/ui/mode-toggle';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
     Bell,
+    Euro,
     Home,
     LineChart,
     Menu,
     Package,
     Search,
     ShoppingCart,
+    UserRoundCog,
     Users,
+    Wine,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -69,8 +72,8 @@ export default function Dashboard() {
                                 href='#'
                                 className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
                             >
-                                <ShoppingCart className='h-4 w-4' />
-                                Orders
+                                <Euro className='h-4 w-4' />
+                                Facturation
                                 <Badge className='ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full'>
                                     6
                                 </Badge>
@@ -79,22 +82,22 @@ export default function Dashboard() {
                                 href='#'
                                 className='flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary'
                             >
-                                <Package className='h-4 w-4' />
-                                Products{' '}
+                                <Wine className='h-4 w-4' />
+                                Vins{' '}
                             </Link>
                             <Link
                                 href='#'
                                 className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
                             >
                                 <Users className='h-4 w-4' />
-                                Customers
+                                Clients
                             </Link>
                             <Link
                                 href='#'
                                 className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
                             >
-                                <LineChart className='h-4 w-4' />
-                                Analytics
+                                <UserRoundCog className='h-4 w-4' />
+                                Profil
                             </Link>
                         </nav>
                     </div>

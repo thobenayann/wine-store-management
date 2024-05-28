@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge';
 import {
     Card,
     CardContent,
@@ -14,31 +13,34 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { PayedSwitch } from '../ui/payed-switch';
 
-export default function Orders() {
+export default function Factures() {
     return (
         <Card>
             <CardHeader className='px-7'>
-                <CardTitle>Orders</CardTitle>
+                <CardTitle>Factures</CardTitle>
                 <CardDescription>
-                    Recent orders from your store.
+                    Factures récentes de votre magasin.
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Customer</TableHead>
+                            <TableHead>Client</TableHead>
                             <TableHead className='hidden sm:table-cell'>
                                 Type
                             </TableHead>
                             <TableHead className='hidden sm:table-cell'>
-                                Status
+                                Statut
                             </TableHead>
                             <TableHead className='hidden md:table-cell'>
                                 Date
                             </TableHead>
-                            <TableHead className='text-right'>Amount</TableHead>
+                            <TableHead className='text-right'>
+                                Montant
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -50,18 +52,16 @@ export default function Orders() {
                                 </div>
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                Sale
+                                Vente
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                <Badge className='text-xs' variant='secondary'>
-                                    Fulfilled
-                                </Badge>
+                                <PayedSwitch status='En cours' />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
                                 2023-06-23
                             </TableCell>
                             <TableCell className='text-right'>
-                                $250.00
+                                €250.00
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -72,21 +72,16 @@ export default function Orders() {
                                 </div>
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                Refund
+                                Remboursement
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                <Badge
-                                    className='text-xs'
-                                    variant='destructive'
-                                >
-                                    Declined
-                                </Badge>
+                                <PayedSwitch status='Payée' initialIsOn />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
                                 2023-06-24
                             </TableCell>
                             <TableCell className='text-right'>
-                                $150.00
+                                €150.00
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -97,18 +92,16 @@ export default function Orders() {
                                 </div>
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                Subscription
+                                Vente
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                <Badge className='text-xs' variant='secondary'>
-                                    Fulfilled
-                                </Badge>
+                                <PayedSwitch status='Payée' initialIsOn />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
                                 2023-06-25
                             </TableCell>
                             <TableCell className='text-right'>
-                                $350.00
+                                €350.00
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -119,18 +112,16 @@ export default function Orders() {
                                 </div>
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                Sale
+                                Vente
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                <Badge className='text-xs' variant='secondary'>
-                                    Fulfilled
-                                </Badge>
+                                <PayedSwitch status='En cours' />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
                                 2023-06-26
                             </TableCell>
                             <TableCell className='text-right'>
-                                $450.00
+                                €450.00
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -141,18 +132,16 @@ export default function Orders() {
                                 </div>
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                Sale
+                                Vente
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                <Badge className='text-xs' variant='secondary'>
-                                    Fulfilled
-                                </Badge>
+                                <PayedSwitch status='En cours' />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
                                 2023-06-23
                             </TableCell>
                             <TableCell className='text-right'>
-                                $250.00
+                                €250.00
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -163,18 +152,16 @@ export default function Orders() {
                                 </div>
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                Sale
+                                Vente
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                <Badge className='text-xs' variant='secondary'>
-                                    Fulfilled
-                                </Badge>
+                                <PayedSwitch status='En cours' />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
                                 2023-06-23
                             </TableCell>
                             <TableCell className='text-right'>
-                                $250.00
+                                €250.00
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -185,21 +172,16 @@ export default function Orders() {
                                 </div>
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                Refund
+                                Remboursement
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                <Badge
-                                    className='text-xs'
-                                    variant='destructive'
-                                >
-                                    Declined
-                                </Badge>
+                                <PayedSwitch status='Payée' initialIsOn />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
                                 2023-06-24
                             </TableCell>
                             <TableCell className='text-right'>
-                                $150.00
+                                €150.00
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -210,18 +192,16 @@ export default function Orders() {
                                 </div>
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                Sale
+                                Vente
                             </TableCell>
                             <TableCell className='hidden sm:table-cell'>
-                                <Badge className='text-xs' variant='secondary'>
-                                    Fulfilled
-                                </Badge>
+                                <PayedSwitch status='En cours' />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
                                 2023-06-26
                             </TableCell>
                             <TableCell className='text-right'>
-                                $450.00
+                                €450.00
                             </TableCell>
                         </TableRow>
                     </TableBody>
