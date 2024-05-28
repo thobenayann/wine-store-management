@@ -107,7 +107,10 @@ export default function LoginForm() {
                                         asChild
                                         className='px-0 font-normal'
                                     >
-                                        <Link href='/auth/reset-password'>
+                                        <Link
+                                            href='/auth/reset-password'
+                                            className='text-white dark:text-gray-300 hover:text-gray-400 dark:hover:text-gray-200'
+                                        >
                                             Mot de passe oublié ?
                                         </Link>
                                     </Button>

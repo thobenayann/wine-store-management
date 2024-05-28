@@ -1,5 +1,6 @@
 import LoginButton from '@/components/auth/login-button';
 import { Button } from '@/components/ui/button';
+import FlipText from '@/components/ui/flip-text';
 import { Spotlight } from '@/components/ui/Spotlight';
 import Image from 'next/image';
 
@@ -10,9 +11,21 @@ export default function Home() {
             <Spotlight fill='white' />
             <div className='p-4 max-w-7xl mx-auto z-10 w-full pt-20 md:pt-0 flex flex-col items-center'>
                 <h1 className='text-4xl md:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50'>
-                    Bienvenue <br />
-                    dans votre appli de gestion
-                    <br /> wine store.
+                    <span className='tracking-wider'>Bienvenue dans</span>
+                    <div className='bg-transparent bg-opacity-50 bg-clip-text text-transparent'>
+                        <FlipText
+                            className='text-black dark:text-white bg-transparent bg-opacity-50 bg-clip-text text-transparent'
+                            word='Wine'
+                        />
+                        <FlipText
+                            className='text-black dark:text-white bg-transparent bg-opacity-50 bg-clip-text text-transparent'
+                            word='Store'
+                        />
+                        <FlipText
+                            className='text-black dark:text-white bg-transparent bg-opacity-50 bg-clip-text text-transparent'
+                            word='Management'
+                        />
+                    </div>
                 </h1>
                 <Image
                     src='/gif/wired-flat-240-glass-of-wine.gif'

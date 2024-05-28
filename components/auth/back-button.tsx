@@ -15,7 +15,7 @@ function BackButton({ label, href }: BackButtonProps) {
             variant='link'
             asChild
             onClick={() => {}}
-            className='font-normal w-full'
+            className='font-normal w-full text-white dark:text-gray-300 hover:text-gray-400 dark:hover:text-gray-200'
         >
             <Link href={href}>{label}</Link>
         </Button>
