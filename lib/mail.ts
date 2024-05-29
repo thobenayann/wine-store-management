@@ -8,7 +8,7 @@ const emailConfig = {
         to: 'delivered@resend.dev',
     },
     production: {
-        from: `No-reply <${process.env.SERVER_MAIL}>`,
+        from: `Wine Store Management <${process.env.SERVER_MAIL}>`,
         to: process.env.ADMIN_MAIL || 'thobena.yann@gmail.com',
     },
 };
@@ -24,9 +24,9 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     try {
         const response = await resend.emails.send({
             from: config.from, // mail server (whatever you want before the @mydomain.com)
-            to: config.to, // mail admin (the one who will receive the email)
+            to: email,
             subject: 'Confirmez votre adresse email',
-            reply_to: email,
+            reply_to: config.to, // admin
             html: `
             <h1>Confirmez votre adresse email</h1>
             <p>Merci de vous être inscrit sur Wite Store Management. Cliquez sur le lien ci-dessous pour confirmer votre adresse email.</p>
@@ -48,9 +48,9 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     try {
         const response = await resend.emails.send({
             from: config.from, // mail server (whatever you want before the @mydomain.com)
-            to: config.to, // mail admin (the one who will receive the email)
+            to: email,
             subject: 'Réinitialisez votre mot de passe',
-            reply_to: email,
+            reply_to: config.to, // admin
             html: `
             <h1>Réinitialisez votre mot de passe</h1>
             <a href="${confirmLink}">Cliquez pour changer votre mot de passe</a>
