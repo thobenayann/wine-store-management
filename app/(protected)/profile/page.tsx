@@ -1,7 +1,7 @@
 import { auth, signOut } from '@/auth';
 import { Button } from '@/components/ui/button';
 
-async function SettingsPage() {
+async function profilePage() {
     const session = await auth();
     return (
         <div>
@@ -13,10 +13,10 @@ async function SettingsPage() {
                     await signOut();
                 }}
             >
-                <Button type='submit'>Se déconnecter</Button>
+                <Button type="submit">Se déconnecter</Button>
             </form>
         </div>
     );
 }
 
-export default SettingsPage;
+export default profilePage;
