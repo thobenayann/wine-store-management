@@ -56,8 +56,16 @@ export const accountFormSchema = z.object({
     email: z.string().email({
         message: 'Veuillez rentrer une adresse email valide',
     }),
-    password: z.string().min(6, {
-        message: 'Le mot de passe doit détenir 6 caractères minimum',
-    }),
-    image: z.string().optional(),
+    password: z
+        .union([
+            z
+                .string()
+                .min(6, { message: 'Password must be at least 6 characters.' }),
+            z.literal(''),
+        ])
+        .optional(),
+    image:
+        typeof window === 'undefined'
+            ? z.any()
+            : z.instanceof(FileList).optional(),
 });

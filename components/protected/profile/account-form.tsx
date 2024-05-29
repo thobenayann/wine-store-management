@@ -1,5 +1,6 @@
 'use client';
 
+import { updateUser } from '@/actions/update-user';
 import { Button } from '@/components/ui/button';
 import {
     Form,
@@ -17,7 +18,7 @@ import { accountFormSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Session } from 'next-auth';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -29,6 +30,8 @@ interface AccountFormProps {
 
 export default function AccountForm({ session }: AccountFormProps) {
     const [isEditable, setIsEditable] = useState(false);
+    const [isPending, startTransition] = useTransition();
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     const form = useForm<AccountFormValues>({
         resolver: zodResolver(accountFormSchema),
@@ -37,25 +40,53 @@ export default function AccountForm({ session }: AccountFormProps) {
             lastName: session?.user.lastName || '',
             email: session?.user.email || '',
             password: '',
-            image: session?.user.image || '',
+            // image: session?.user.image || null,
         },
     });
 
     const { toast } = useToast();
+    const fileRef = form.register('image');
 
-    function onSubmit(data: AccountFormValues) {
-        console.log('SUBMIT');
-        toast({
-            title: 'You submitted the following values:',
-            description: (
-                <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-                    <code className='text-white'>
-                        {JSON.stringify(data, null, 2)}
-                    </code>
-                </pre>
-            ),
-        });
-    }
+    const onSubmit = async (data: AccountFormValues) => {
+        if (!session?.user.id) return;
+
+        const formData = new FormData();
+        formData.append('firstName', data.firstName);
+        formData.append('lastName', data.lastName);
+        formData.append('email', data.email);
+        formData.append('password', data.password || '');
+        if (data.image && data.image.length > 0) {
+            formData.append('image', data.image[0]);
+        }
+
+        try {
+            const response = await updateUser(formData, session.user.id);
+            if (response.error) {
+                toast({
+                    title: 'Error',
+                    description: response.error,
+                    variant: 'destructive',
+                });
+            } else {
+                toast({
+                    title: 'Success',
+                    description: response.success,
+                });
+                setIsEditable(false);
+            }
+        } catch (error) {
+            toast({
+                title: 'Error',
+                description: 'Failed to update user.',
+                variant: 'destructive',
+            });
+        }
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] || null;
+        setImageFile(file);
+    };
 
     if (!session) return null;
     const { user } = session;
@@ -88,6 +119,14 @@ export default function AccountForm({ session }: AccountFormProps) {
                                     htmlFor='picture'
                                     label='Image'
                                     disabled={!isEditable}
+                                    {...fileRef}
+                                    onChange={(event) => {
+                                        fileRef.onChange(event);
+                                        form.setValue(
+                                            'image',
+                                            event.target.files
+                                        );
+                                    }}
                                 />
                             </FormItem>
                         ) : null}
@@ -125,7 +164,7 @@ export default function AccountForm({ session }: AccountFormProps) {
                                     <Input
                                         placeholder='Votre nom de famille'
                                         {...field}
-                                        disabled={!isEditable}
+                                        disabled={!isEditable || isPending}
                                     />
                                 </FormControl>
                                 <FormDescription>
@@ -148,7 +187,7 @@ export default function AccountForm({ session }: AccountFormProps) {
                                     <Input
                                         placeholder='Votre email'
                                         {...field}
-                                        disabled={!isEditable}
+                                        disabled={!isEditable || isPending}
                                     />
                                 </FormControl>
                                 <FormDescription>
@@ -170,7 +209,7 @@ export default function AccountForm({ session }: AccountFormProps) {
                                         type='password'
                                         placeholder='********'
                                         {...field}
-                                        disabled={!isEditable}
+                                        disabled={!isEditable || isPending}
                                     />
                                 </FormControl>
                                 <FormDescription>

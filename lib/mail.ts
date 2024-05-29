@@ -33,7 +33,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
             <a href="${confirmLink}">Confirmer mon adresse email</a>
         `,
         });
-        console.log('Email sent successfully');
+
         return Response.json(response);
     } catch (error) {
         console.error('Error sending email:', error);
@@ -56,7 +56,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
             <a href="${confirmLink}">Cliquez pour changer votre mot de passe</a>
         `,
         });
-        console.log('Email sent successfully');
+
         return Response.json(response);
     } catch (error) {
         console.error('Error sending email:', error);
