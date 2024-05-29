@@ -1,20 +1,13 @@
-import { auth, signOut } from '@/auth';
-import { Button } from '@/components/ui/button';
+import { auth } from '@/auth';
+import AccountForm from '@/components/protected/profile/account-form';
+import { Session } from 'next-auth';
 
 async function profilePage() {
-    const session = await auth();
+    const session: Session | null = await auth();
     return (
-        <div>
-            {JSON.stringify(session)}
-            <form
-                action={async () => {
-                    'use server';
-
-                    await signOut();
-                }}
-            >
-                <Button type="submit">Se déconnecter</Button>
-            </form>
+        <div className='container mx-auto p-4'>
+            <h1 className='text-2xl font-bold mb-4'>Profile</h1>
+            <AccountForm session={session} />
         </div>
     );
 }

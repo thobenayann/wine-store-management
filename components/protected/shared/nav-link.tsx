@@ -15,7 +15,6 @@ interface NavLinkProps {
 
 const NavLink = ({ name, href, className, children, badge }: NavLinkProps) => {
     const currentPathname = usePathname();
-    console.log('currentPathname', currentPathname);
     const isActive = href === currentPathname;
 
     return (
@@ -25,7 +24,7 @@ const NavLink = ({ name, href, className, children, badge }: NavLinkProps) => {
         >
             {children}
             {name}
-            {badge && <span className="ml-auto">{badge}</span>}
+            {badge && <span className='ml-auto'>{badge}</span>}
         </Link>
     );
 };
