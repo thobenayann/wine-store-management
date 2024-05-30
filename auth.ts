@@ -11,10 +11,12 @@ declare module 'next-auth' {
     /**
      * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
      */
-    interface Session {
+    export interface Session {
         user: {
             /** The user's postal address. */
             role: UserRole;
+            firstName: string;
+            lastName: string;
             /**
              * By default, TypeScript merges new interface properties and overwrites existing ones.
              * In this case, the default session user properties will be overwritten,
@@ -152,10 +154,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             // add the user id to the session (custom field)
             if (token.sub && session.user) {
                 session.user.id = token.sub;
-            }
-
-            if (token.role && session.user) {
-                session.user.role = token.role as UserRole;
+                session.user.role = token.role as UserRole; // Cast the type of token.role to UserRole
+                session.user.firstName = token.firstName as string;
+                session.user.lastName = token.lastName as string;
             }
 
             return session;
@@ -169,6 +170,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (!existingUser) return token;
 
             token.role = existingUser.role;
+            token.firstName = existingUser.first_name;
+            token.lastName = existingUser.last_name;
 
             return token;
         },
