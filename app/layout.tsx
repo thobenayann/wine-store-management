@@ -1,5 +1,5 @@
-import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/ui/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter as FontSans, Merriweather as FontSerif } from 'next/font/google';
@@ -41,7 +41,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="fr" suppressHydrationWarning>
+        <html lang='fr' suppressHydrationWarning>
             <body
                 className={cn(
                     'min-h-screen bg-background font-sans antialiased',
@@ -50,8 +50,8 @@ export default function RootLayout({
                 )}
             >
                 <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
+                    attribute='class'
+                    defaultTheme='system'
                     enableSystem
                     disableTransitionOnChange
                 >
