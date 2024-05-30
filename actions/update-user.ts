@@ -9,6 +9,7 @@ import path from 'path';
 type UpdateUserResult = {
     success?: string;
     error?: string;
+    image?: string;
 };
 
 export const updateUser = async (
@@ -38,7 +39,15 @@ export const updateUser = async (
             return { error: 'Cette adresse email est déjà prise.' };
         }
 
-        // manage image upload
+        // Get current user data
+        const currentUser = await prisma.user.findUnique({
+            where: { id: userId },
+        });
+        if (!currentUser) {
+            return { error: 'User not found.' };
+        }
+
+        // Manage image upload
         let imageUrl: string | undefined = undefined;
         if (imageFile) {
             const imagePath = path.join(
@@ -53,12 +62,28 @@ export const updateUser = async (
                 imagePath,
                 `profile${imageExtension}`
             );
+
+            // Delete the old image if it exists
+            if (currentUser.image) {
+                const oldImagePath = path.join(
+                    process.cwd(),
+                    'public',
+                    currentUser.image
+                );
+                await fs
+                    .unlink(oldImagePath)
+                    .catch((err) =>
+                        console.error('Failed to delete old image:', err)
+                    );
+            }
+
             const arrayBuffer = await imageFile.arrayBuffer();
             const buffer = Buffer.from(arrayBuffer);
             await fs.writeFile(imagePathFull, buffer);
             imageUrl = `/profiles/${userId}/profile${imageExtension}`;
         }
 
+        // update User
         await prisma.user.update({
             where: { id: userId },
             data: {

@@ -27,7 +27,7 @@ declare module 'next-auth' {
     }
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
     pages: {
         signIn: '/auth/login',
         error: '/auth/error',
@@ -161,7 +161,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
             return session;
         },
-        async jwt({ token }) {
+        async jwt({ token, session, trigger }) {
             if (!token.sub) return token;
 
             // Get any information we need for the user based on the token
@@ -172,6 +172,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             token.role = existingUser.role;
             token.firstName = existingUser.first_name;
             token.lastName = existingUser.last_name;
+
+            if (trigger === 'update' && session) {
+                console.log(
+                    'Updating session with user data triggerd by jwt callback'
+                );
+                token = { ...token, user: session };
+                return token;
+            }
 
             return token;
         },

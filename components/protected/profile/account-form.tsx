@@ -17,8 +17,9 @@ import { useToast } from '@/hooks/use-toast';
 import { accountFormSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -30,8 +31,9 @@ interface AccountFormProps {
 
 export default function AccountForm({ session }: AccountFormProps) {
     const [isEditable, setIsEditable] = useState(false);
-    const [isPending, startTransition] = useTransition();
-    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [isPending] = useTransition();
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const { update } = useSession();
 
     const form = useForm<AccountFormValues>({
         resolver: zodResolver(accountFormSchema),
@@ -40,12 +42,15 @@ export default function AccountForm({ session }: AccountFormProps) {
             lastName: session?.user.lastName || '',
             email: session?.user.email || '',
             password: '',
-            // image: session?.user.image || null,
         },
     });
 
     const { toast } = useToast();
     const fileRef = form.register('image');
+
+    useEffect(() => {
+        setImageUrl(session?.user.image || null);
+    }, [session]);
 
     const onSubmit = async (data: AccountFormValues) => {
         if (!session?.user.id) return;
@@ -73,19 +78,26 @@ export default function AccountForm({ session }: AccountFormProps) {
                     description: response.success,
                 });
                 setIsEditable(false);
+                update((prev: Session) => ({
+                    ...prev,
+                    user: {
+                        ...prev.user,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        email: data.email,
+                        image: response.image || prev.user.image,
+                    },
+                }));
+                console.log('session :', session);
             }
         } catch (error) {
+            console.error('Error updating user:', error);
             toast({
                 title: 'Error',
                 description: 'Failed to update user.',
                 variant: 'destructive',
             });
         }
-    };
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0] || null;
-        setImageFile(file);
     };
 
     if (!session) return null;
@@ -96,9 +108,9 @@ export default function AccountForm({ session }: AccountFormProps) {
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
                 <div className='flex max-md:flex-col max-md:items-center max-sm:space-y-8 md:space-x-10'>
                     <div className='flex items-center w-full space-x-6 md:space-x-10'>
-                        {user && user.image ? (
+                        {imageUrl ? (
                             <Image
-                                src={user.image}
+                                src={imageUrl}
                                 alt='User Avatar'
                                 className='h-20 w-20 rounded-full object-cover'
                                 width={80}
