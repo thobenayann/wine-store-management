@@ -17,13 +17,14 @@ export function PayedSwitch({ status, initialIsOn = false }: PayedSwitchProps) {
     };
 
     return (
-        <div className='flex items-center space-x-2'>
-            <Switch
-                id='invoice-status'
-                checked={isOn}
-                onChange={toggleSwitch}
-            />
-            <Label htmlFor='invoice-status'>{status}</Label>
+        <div className='flex max-md:flex-col max-md:space-y-2 max-md:justify-center items-center md:space-x-2'>
+            <Switch id='invoice-status' checked={isOn} onClick={toggleSwitch} />
+            <Label
+                className='max-md:text-center text-xs md:text-sm'
+                htmlFor='invoice-status'
+            >
+                {isOn ? 'Payée' : 'En cours'}
+            </Label>
         </div>
     );
 }
