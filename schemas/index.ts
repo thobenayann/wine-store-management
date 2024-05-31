@@ -69,3 +69,18 @@ export const accountFormSchema = z.object({
             ? z.any()
             : z.instanceof(FileList).optional(),
 });
+
+// WINES
+export const CreateWineSchema = z.object({
+    name: z.string().min(1, { message: 'Name is required' }),
+    type: z.string().min(1, { message: 'Type is required' }),
+    region: z.string().min(1, { message: 'Region is required' }),
+    year: z.number().min(1900, { message: 'Year must be a valid year' }),
+    price: z.number().min(0, { message: 'Price must be a positive number' }),
+    stock: z.number().min(0, { message: 'Stock must be a positive number' }),
+    stock_alert: z
+        .number()
+        .min(0, { message: 'Stock Alert must be a positive number' }),
+});
+
+export type CreateWineSchemaType = z.infer<typeof CreateWineSchema>;

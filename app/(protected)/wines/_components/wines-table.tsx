@@ -34,7 +34,7 @@ const wineColors: { [key: string]: string } = {
     rose: '#f49ac1',
 };
 
-const getWineTypeSVG = (type: string) => {
+export const getWineTypeSVG = (type: string) => {
     const color = wineColors[type] || '#f49ac1';
     return (
         <svg
