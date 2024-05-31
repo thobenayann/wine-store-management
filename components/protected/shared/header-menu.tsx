@@ -1,4 +1,3 @@
-import { auth } from '@/auth';
 import LogoutBtn from '@/components/auth/logout-btn';
 import UserMenuTrigger from '@/components/auth/user-icon';
 import {
@@ -10,16 +9,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { ModeToggle } from '@/components/ui/mode-toggle';
+import { getCurrentUserSession } from '@/lib/getSession';
 import { Search } from 'lucide-react';
-import { Session } from 'next-auth';
 import Link from 'next/link';
 import MobileMenu from './mobile-menu';
 
 async function HeaderMenu() {
-    const session: Session | null = await auth();
-    if (!session) {
-        return null;
-    }
+    const session = await getCurrentUserSession();
+
     return (
         <header className='flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6'>
             <MobileMenu />
@@ -39,7 +36,9 @@ async function HeaderMenu() {
             <DropdownMenu>
                 <UserMenuTrigger />
                 <DropdownMenuContent align='end'>
-                    <DropdownMenuLabel>{`Hello ${session.user.firstName} 👋`}</DropdownMenuLabel>
+                    <DropdownMenuLabel>{`Hello ${
+                        session?.user?.firstName ?? ''
+                    } 👋`}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <Link
                         href='/profile'

@@ -1,11 +1,11 @@
-import { auth } from '@/auth';
 import { DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { getCurrentUserSession } from '@/lib/getSession';
 import { CircleUser } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '../ui/button';
 
 export default async function UserMenuTrigger() {
-    const session = await auth();
+    const session = await getCurrentUserSession();
 
     const userImage = session?.user?.image;
 
