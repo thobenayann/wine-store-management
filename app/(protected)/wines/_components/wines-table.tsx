@@ -13,6 +13,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { wineData } from '@/data/fake-wine-data';
+import { cn } from '@/lib/utils';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -26,6 +27,35 @@ import {
 } from '@tanstack/react-table';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { useMemo, useState } from 'react';
+
+const wineColors: { [key: string]: string } = {
+    rouge: '#961623',
+    blanc: '#f5e042',
+    rose: '#f49ac1',
+};
+
+const getWineTypeSVG = (type: string) => {
+    const color = wineColors[type] || '#f49ac1';
+    return (
+        <svg
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox='0 0 64 64'
+            width='16'
+            height='16'
+            className='mr-2'
+        >
+            <path
+                fill={cn(color)}
+                d='M15.1 22.1C16 30.1 23.3 37 32 37c9.4 0 17.1-8 17.1-16.7v-.2c-9.8-1.3-22.1 5.8-34 2'
+            />
+            <path
+                fill='#a1b8c7'
+                d='M54 20.4C54 9 48.3 2 48.3 2H15.7S10 9.1 10 20.4c0 10.8 9.3 20.9 20.9 21.5-.1 6.3-.7 12.8-2.2 15.1-2.2 3.2-9.8 1.6-9.8 5h26.2c0-3.4-7.6-1.8-9.8-5-1.5-2.3-2.1-8.8-2.2-15.1C44.7 41.3 54 31.3 54 20.4M32 39.3c-9.8 0-17.9-7.8-18.9-16.7-.1-.6-.1-1.3-.1-1.9 0-9.9 4.9-15.9 4.9-15.9h28.2s4.8 6 4.9 15.7v.2c0 9.6-8.5 18.6-19 18.6'
+                opacity='.8'
+            />
+        </svg>
+    );
+};
 
 const columns: ColumnDef<any>[] = [
     {
@@ -41,7 +71,12 @@ const columns: ColumnDef<any>[] = [
             <DataTableColumnHeader column={column} title='Type' />
         ),
         filterFn: (row, id, value) => value.includes(row.getValue(id)),
-        cell: ({ row }) => <div>{row.original.type}</div>,
+        cell: ({ row }) => (
+            <div className='flex items-center'>
+                {getWineTypeSVG(row.original.type)}
+                {row.original.type}
+            </div>
+        ),
     },
     {
         accessorKey: 'region',
