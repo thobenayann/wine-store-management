@@ -1,3 +1,5 @@
+import { WineType } from '@prisma/client';
+
 export const wineData = [
     {
         id: '1',
@@ -7,7 +9,7 @@ export const wineData = [
         price: 20.5,
         stock: 150,
         stock_alert: 10,
-        type: 'blanc',
+        type: WineType.WHITE,
     },
     {
         id: '2',
@@ -17,7 +19,7 @@ export const wineData = [
         price: 15.75,
         stock: 80,
         stock_alert: 5,
-        type: 'rouge',
+        type: WineType.RED,
     },
     {
         id: '3',
@@ -27,7 +29,7 @@ export const wineData = [
         price: 30.0,
         stock: 60,
         stock_alert: 5,
-        type: 'rouge',
+        type: WineType.RED,
     },
     {
         id: '4',
@@ -37,7 +39,7 @@ export const wineData = [
         price: 25.0,
         stock: 100,
         stock_alert: 10,
-        type: 'rouge',
+        type: WineType.RED,
     },
     {
         id: '5',
@@ -47,7 +49,7 @@ export const wineData = [
         price: 18.5,
         stock: 120,
         stock_alert: 15,
-        type: 'blanc',
+        type: WineType.WHITE,
     },
     {
         id: '6',
@@ -57,7 +59,7 @@ export const wineData = [
         price: 22.0,
         stock: 90,
         stock_alert: 5,
-        type: 'rouge',
+        type: WineType.RED,
     },
     {
         id: '7',
@@ -67,7 +69,7 @@ export const wineData = [
         price: 28.5,
         stock: 70,
         stock_alert: 5,
-        type: 'rouge',
+        type: WineType.RED,
     },
     {
         id: '8',
@@ -77,7 +79,7 @@ export const wineData = [
         price: 19.75,
         stock: 110,
         stock_alert: 10,
-        type: 'blanc',
+        type: WineType.WHITE,
     },
     {
         id: '9',
@@ -87,7 +89,7 @@ export const wineData = [
         price: 24.0,
         stock: 75,
         stock_alert: 5,
-        type: 'rouge',
+        type: WineType.RED,
     },
     {
         id: '10',
@@ -97,7 +99,7 @@ export const wineData = [
         price: 26.5,
         stock: 100,
         stock_alert: 10,
-        type: 'blanc',
+        type: WineType.WHITE,
     },
     {
         id: '11',
@@ -107,7 +109,7 @@ export const wineData = [
         price: 17.5,
         stock: 85,
         stock_alert: 5,
-        type: 'rouge',
+        type: WineType.RED,
     },
     {
         id: '12',
@@ -117,6 +119,6 @@ export const wineData = [
         price: 16.0,
         stock: 95,
         stock_alert: 5,
-        type: 'rosé',
+        type: WineType.ROSE,
     },
 ];

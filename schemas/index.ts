@@ -73,7 +73,7 @@ export const accountFormSchema = z.object({
 // WINES
 export const CreateWineSchema = z.object({
     name: z.string().min(1, { message: 'Name is required' }),
-    type: z.string().min(1, { message: 'Type is required' }),
+    type: z.enum(['RED', 'WHITE', 'ROSE'], { message: 'Type is required' }),
     region: z.string().min(1, { message: 'Region is required' }),
     year: z.number().min(1900, { message: 'Year must be a valid year' }),
     price: z.number().min(0, { message: 'Price must be a positive number' }),
@@ -82,5 +82,9 @@ export const CreateWineSchema = z.object({
         .number()
         .min(0, { message: 'Stock Alert must be a positive number' }),
 });
-
 export type CreateWineSchemaType = z.infer<typeof CreateWineSchema>;
+
+export const DeleteWineSchema = z.object({
+    id: z.string().min(1, { message: 'ID is required' }),
+});
+export type DeleteWineSchemaType = z.infer<typeof DeleteWineSchema>;

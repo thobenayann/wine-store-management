@@ -1,5 +1,6 @@
 'use client';
 
+import { CreateWine } from '@/actions/wine';
 import { getWineTypeSVG } from '@/app/(protected)/wines/_components/wines-table';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,9 +30,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { frenchRegions, wineTypes } from '@/constants/wines';
+import { frenchRegions, WineType, wineTypeLabels } from '@/constants/wines';
 import { CreateWineSchema, CreateWineSchemaType } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2, PlusSquare } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -47,11 +49,22 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
         resolver: zodResolver(CreateWineSchema),
     });
 
+    const queryClient = useQueryClient();
+    const { mutate, isPending } = useMutation({
+        mutationFn: CreateWine,
+        onSuccess: () => {
+            toast.success('Wine data submitted successfully 🎉');
+            // queryClient.invalidateQueries(['wines']);
+            setOpen((prev) => !prev);
+            form.reset();
+        },
+        onError: () => {
+            toast.error('Failed to submit wine data');
+        },
+    });
+
     const onSubmit = (values: CreateWineSchemaType) => {
-        console.log('Submitted data:', values);
-        toast.success('Wine data submitted successfully 🎉');
-        setOpen(false);
-        form.reset();
+        mutate(values);
     };
 
     return (
@@ -98,6 +111,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                             Le nom du vin qui apparaîtra dans
                                             l&apos;application
                                         </FormDescription>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -116,21 +130,21 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                     <SelectValue placeholder='Type de vin' />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {wineTypes.map(
-                                                        (type: string) => (
-                                                            <SelectItem
-                                                                key={type}
-                                                                value={type}
-                                                            >
-                                                                <div className='flex items-center'>
-                                                                    {getWineTypeSVG(
-                                                                        type
-                                                                    )}
-                                                                    {type}
-                                                                </div>
-                                                            </SelectItem>
-                                                        )
-                                                    )}
+                                                    {Object.entries(
+                                                        wineTypeLabels
+                                                    ).map(([value, label]) => (
+                                                        <SelectItem
+                                                            key={value}
+                                                            value={value}
+                                                        >
+                                                            <div className='flex items-center'>
+                                                                {getWineTypeSVG(
+                                                                    value as WineType
+                                                                )}
+                                                                {label}
+                                                            </div>
+                                                        </SelectItem>
+                                                    ))}
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
@@ -138,6 +152,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                             Il s&apos;agit du type tel que
                                             rouge, blanc, rosé
                                         </FormDescription>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -172,6 +187,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                         <FormDescription>
                                             La région où le vin a été produit
                                         </FormDescription>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -200,6 +216,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                         <FormDescription>
                                             L&apos;année de production du vin
                                         </FormDescription>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -215,9 +232,8 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 value={field.value}
                                                 onChange={(e) =>
                                                     field.onChange(
-                                                        parseInt(
-                                                            e.target.value,
-                                                            10
+                                                        parseFloat(
+                                                            e.target.value
                                                         )
                                                     )
                                                 }
@@ -229,6 +245,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                         <FormDescription>
                                             Le prix du vin en euros
                                         </FormDescription>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -258,6 +275,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                             Il s&apos;agit du stock actuel du
                                             vin
                                         </FormDescription>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />

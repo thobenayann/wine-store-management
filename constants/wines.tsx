@@ -1,4 +1,14 @@
-export const wineTypes = ['rouge', 'blanc', 'rosé'];
+export const wineTypeLabels = {
+    RED: 'rouge',
+    WHITE: 'blanc',
+    ROSE: 'rosé',
+} as const;
+
+export type WineType = keyof typeof wineTypeLabels;
+
+export const getWineTypeLabel = (type: 'RED' | 'WHITE' | 'ROSE') => {
+    return wineTypeLabels[type];
+};
 
 export const frenchRegions = [
     'Auvergne-Rhône-Alpes',

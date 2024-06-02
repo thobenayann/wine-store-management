@@ -12,8 +12,8 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { WineType, wineTypeLabels } from '@/constants/wines';
 import { wineData } from '@/data/fake-wine-data';
-import { cn } from '@/lib/utils';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -28,13 +28,13 @@ import {
 import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { useMemo, useState } from 'react';
 
-const wineColors: { [key: string]: string } = {
-    rouge: '#961623',
-    blanc: '#f5e042',
-    rose: '#f49ac1',
+const wineColors: { [key in WineType]: string } = {
+    RED: '#961623',
+    WHITE: '#f5e042',
+    ROSE: '#f49ac1',
 };
 
-export const getWineTypeSVG = (type: string) => {
+export const getWineTypeSVG = (type: WineType) => {
     const color = wineColors[type] || '#f49ac1';
     return (
         <svg
@@ -45,7 +45,7 @@ export const getWineTypeSVG = (type: string) => {
             className='mr-2'
         >
             <path
-                fill={cn(color)}
+                fill={color}
                 d='M15.1 22.1C16 30.1 23.3 37 32 37c9.4 0 17.1-8 17.1-16.7v-.2c-9.8-1.3-22.1 5.8-34 2'
             />
             <path
@@ -73,8 +73,8 @@ const columns: ColumnDef<any>[] = [
         filterFn: (row, id, value) => value.includes(row.getValue(id)),
         cell: ({ row }) => (
             <div className='flex items-center'>
-                {getWineTypeSVG(row.original.type)}
-                {row.original.type}
+                {getWineTypeSVG(row.original.type as WineType)}
+                {wineTypeLabels[row.original.type as WineType]}
             </div>
         ),
     },
