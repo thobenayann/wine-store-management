@@ -22,6 +22,20 @@ export async function CreateWine(form: CreateWineSchemaType) {
 
     const { name, type, region, year, price, stock, stock_alert } =
         parsedBody.data;
+
+    // Vérifier si le vin existe déjà pour l'utilisateur
+    const existingWine = await prisma.wine.findFirst({
+        where: {
+            name,
+            userId: session.user.id,
+        },
+    });
+    if (existingWine) {
+        throw new Error(
+            'Un vin avec ce nom existe déjà pour cet utilisateur 🤷'
+        );
+    }
+
     return await prisma.wine.create({
         data: {
             name,

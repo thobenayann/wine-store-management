@@ -37,7 +37,6 @@ import {
     WineType,
     wineTypeLabels,
 } from '@/constants/wines';
-import { useToast } from '@/hooks/use-toast';
 import { CreateWineSchema, CreateWineSchemaType } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -45,32 +44,42 @@ import { Loader2, PlusSquare } from 'lucide-react';
 import Image from 'next/image';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 interface CreateWineDialogProps {
     trigger?: ReactNode;
 }
 
 function CreateWineDialog({ trigger }: CreateWineDialogProps) {
-    const { toast } = useToast();
     const [open, setOpen] = useState(false);
     const form = useForm<CreateWineSchemaType>({
         resolver: zodResolver(CreateWineSchema),
     });
 
     const queryClient = useQueryClient();
-    const { mutate, isPending } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: CreateWine,
-        onSuccess: (data) => {
-            toast({ title: `Le vin ${data?.name} a été ajouté! 🎉` });
-            // queryClient.invalidateQueries(['wines']);
+        onSuccess: async (data) => {
+            toast.success(`Le vin ${data?.name} a été ajouté! 🎉`, {
+                id: 'create-wine',
+            });
+            await queryClient.invalidateQueries({
+                queryKey: ['wines'],
+            });
             setOpen((prev) => !prev);
             form.reset();
         },
-        onError: () => {
-            toast({
-                variant: 'destructive',
-                title: 'Failed to submit wine data',
-            });
+        onError: (error) => {
+            if (
+                error.message ===
+                'Un vin avec ce nom existe déjà pour cet utilisateur'
+            ) {
+                toast.error(error.message, { id: 'delete-wine-already' });
+            } else {
+                toast.error(`Echec lors de l'ajout du vin`, {
+                    id: 'delete-wine',
+                });
+            }
         },
     });
 
@@ -118,7 +127,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 {...field}
                                             />
                                         </FormControl>
-                                        <FormDescription>
+                                        <FormDescription className='max-sm:text-xs'>
                                             Le nom du vin qui apparaîtra dans
                                             l&apos;application
                                         </FormDescription>
@@ -158,7 +167,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
-                                        <FormDescription>
+                                        <FormDescription className='max-sm:text-xs'>
                                             Il s&apos;agit du type tel que
                                             rouge, blanc, rosé
                                         </FormDescription>
@@ -239,7 +248,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
-                                        <FormDescription>
+                                        <FormDescription className='max-sm:text-xs'>
                                             La région où le vin a été produit
                                         </FormDescription>
                                     </FormItem>
@@ -267,7 +276,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 placeholder='Year'
                                             />
                                         </FormControl>
-                                        <FormDescription>
+                                        <FormDescription className='max-sm:text-xs'>
                                             L&apos;année de production du vin
                                         </FormDescription>
                                     </FormItem>
@@ -295,7 +304,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 placeholder='Price'
                                             />
                                         </FormControl>
-                                        <FormDescription>
+                                        <FormDescription className='max-sm:text-xs'>
                                             Le prix du vin en euros
                                         </FormDescription>
                                     </FormItem>
@@ -323,7 +332,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 placeholder='Stock'
                                             />
                                         </FormControl>
-                                        <FormDescription>
+                                        <FormDescription className='max-sm:text-xs'>
                                             Il s&apos;agit du stock actuel du
                                             vin
                                         </FormDescription>
@@ -352,7 +361,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 placeholder='Stock Alert'
                                             />
                                         </FormControl>
-                                        <FormDescription>
+                                        <FormDescription className='max-sm:text-xs'>
                                             Niveau d&apos;alerte du stock
                                         </FormDescription>
                                     </FormItem>

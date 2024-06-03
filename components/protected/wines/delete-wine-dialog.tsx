@@ -11,9 +11,10 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useToast } from '@/hooks/use-toast';
 import { Wine } from '@prisma/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface Props {
     open: boolean;
@@ -22,23 +23,22 @@ interface Props {
 }
 
 function DeleteWineDialog({ wine, setOpen, open }: Props) {
-    const { toast } = useToast();
     const queryClient = useQueryClient();
 
     const { mutate, isPending } = useMutation({
         mutationFn: DeleteWine,
         onSuccess: async () => {
-            toast({ description: `Le vin ${wine.name} a été supprimé` });
+            toast.success(`Le vin ${wine.name} a été supprimé! 🎉`, {
+                id: 'create-wine',
+            });
 
             await queryClient.invalidateQueries({
                 queryKey: ['wines'],
             });
         },
         onError: () => {
-            toast({
-                title: 'Error',
-                description: 'Une erreur est survenue lors de la suppression.',
-                variant: 'destructive',
+            toast.error(`Echec lors de la suppression du vin`, {
+                id: 'delete-wine',
             });
         },
     });
@@ -57,11 +57,11 @@ function DeleteWineDialog({ wine, setOpen, open }: Props) {
                     <AlertDialogCancel>Annuler</AlertDialogCancel>
                     <AlertDialogAction
                         onClick={() => {
-                            isPending &&
-                                toast({
-                                    description:
-                                        'Suppression du vin en cours...',
-                                });
+                            {
+                                isPending && (
+                                    <Loader2 className='animate-spin' />
+                                );
+                            }
                             mutate({ id: wine.id });
                         }}
                     >

@@ -1,9 +1,9 @@
 import QueryProvider from '@/components/providers/query-provider';
 import { ThemeProvider } from '@/components/ui/theme-provider';
-import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter as FontSans, Merriweather as FontSerif } from 'next/font/google';
+import { Toaster } from 'sonner';
 import './globals.css';
 
 const fontSans = FontSans({
@@ -59,7 +59,7 @@ export default function RootLayout({
                     >
                         <main>{children}</main>
                     </ThemeProvider>
-                    <Toaster />
+                    <Toaster richColors />
                 </QueryProvider>
             </body>
         </html>
