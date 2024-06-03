@@ -1,23 +1,15 @@
 import prisma from '@/lib/db';
 import { getCurrentUserSession } from '@/lib/getSession';
-import { NextApiRequest } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export async function GET(req: NextApiRequest) {
+export type GetWinesResponseType = Awaited<ReturnType<typeof getWines>>;
+
+export async function GET(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'GET') {
         return Response.json({ status: 405 });
     }
-
-    const session = await getCurrentUserSession();
-    if (!session) {
-        return Response.json({ status: 401 });
-    }
-
     try {
-        const wines = await prisma.wine.findMany({
-            where: {
-                userId: session.user.id,
-            },
-        });
+        const wines = await getWines();
         return Response.json(wines);
     } catch (error: any) {
         console.error('Error fetching wines:', error);
@@ -27,4 +19,20 @@ export async function GET(req: NextApiRequest) {
             error: error.message,
         });
     }
+}
+
+export async function getWines() {
+    const session = await getCurrentUserSession();
+    if (!session) {
+        throw new Error('Unauthorized');
+    }
+
+    return await prisma.wine.findMany({
+        where: {
+            userId: session.user.id,
+        },
+        orderBy: {
+            name: 'desc',
+        },
+    });
 }

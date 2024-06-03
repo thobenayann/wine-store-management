@@ -1,4 +1,4 @@
-import CreateWineDialog from '@/components/protected/wines/create-wines-dialog';
+import CreateWineDialog from '@/components/protected/wines/create-wine-dialog';
 import { Button } from '@/components/ui/button';
 import { PlusSquare } from 'lucide-react';
 import WinesTable from './_components/wines-table';

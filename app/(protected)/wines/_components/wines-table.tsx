@@ -1,5 +1,6 @@
 'use client';
 
+import { GetWinesResponseType } from '@/app/api/wines/route';
 import { DataTableColumnHeader } from '@/components/data-table/ColumnHeader';
 import { DataTableViewOptions } from '@/components/data-table/ColumnToggle';
 import { DataTableFacetedFilter } from '@/components/data-table/FacetedFilters';
@@ -28,7 +29,13 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
+import { Loader2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import RowActions from './row-actions';
+
+const emptyData: any[] = [];
+
+type WineRow = GetWinesResponseType[0];
 
 const wineColors: { [key in WineType]: string } = {
     RED: '#961623',
@@ -59,7 +66,7 @@ export const getWineTypeSVG = (type: WineType) => {
     );
 };
 
-const columns: ColumnDef<any>[] = [
+const columns: ColumnDef<WineRow>[] = [
     {
         accessorKey: 'name',
         header: ({ column }) => (
@@ -117,6 +124,11 @@ const columns: ColumnDef<any>[] = [
         ),
         cell: ({ row }) => <div>{row.original.stock_alert}</div>,
     },
+    {
+        id: 'actions',
+        enableHiding: false,
+        cell: ({ row }) => <RowActions wine={row.original} />,
+    },
 ];
 
 const csvConfig = mkConfig({
@@ -129,13 +141,13 @@ function WineTable() {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-    const winesQuery = useQuery({
+    const winesQuery = useQuery<GetWinesResponseType>({
         queryKey: ['wines'],
         queryFn: () => fetch(`/api/wines`).then((res) => res.json()),
     });
 
     const table = useReactTable({
-        data: winesQuery.data || [],
+        data: winesQuery.data || emptyData,
         columns,
         getCoreRowModel: getCoreRowModel(),
         state: {
@@ -275,7 +287,18 @@ function WineTable() {
                                         colSpan={columns.length}
                                         className='h-24 text-start md:text-center'
                                     >
-                                        No results.
+                                        Pas de vins trouvés, commencez par en
+                                        ajouter un ! 😉
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                            {winesQuery.isRefetching && (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={columns.length}
+                                        className='text-center'
+                                    >
+                                        <Loader2 className='animate-spin' />
                                     </TableCell>
                                 </TableRow>
                             )}
