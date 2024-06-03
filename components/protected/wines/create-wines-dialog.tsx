@@ -20,30 +20,38 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
+    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { frenchRegions, WineType, wineTypeLabels } from '@/constants/wines';
+import {
+    frenchWineRegions,
+    internationalWineRegions,
+    WineType,
+    wineTypeLabels,
+} from '@/constants/wines';
+import { useToast } from '@/hooks/use-toast';
 import { CreateWineSchema, CreateWineSchemaType } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2, PlusSquare } from 'lucide-react';
+import Image from 'next/image';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 
 interface CreateWineDialogProps {
     trigger?: ReactNode;
 }
 
 function CreateWineDialog({ trigger }: CreateWineDialogProps) {
+    const { toast } = useToast();
     const [open, setOpen] = useState(false);
     const form = useForm<CreateWineSchemaType>({
         resolver: zodResolver(CreateWineSchema),
@@ -52,14 +60,17 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
     const queryClient = useQueryClient();
     const { mutate, isPending } = useMutation({
         mutationFn: CreateWine,
-        onSuccess: () => {
-            toast.success('Wine data submitted successfully 🎉');
+        onSuccess: (data) => {
+            toast({ title: `Le vin ${data?.name} a été ajouté! 🎉` });
             // queryClient.invalidateQueries(['wines']);
             setOpen((prev) => !prev);
             form.reset();
         },
         onError: () => {
-            toast.error('Failed to submit wine data');
+            toast({
+                variant: 'destructive',
+                title: 'Failed to submit wine data',
+            });
         },
     });
 
@@ -92,7 +103,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className='space-y-8'
+                        className='space-y-8 h-full'
                     >
                         <div className='grid grid-cols-2 gap-4'>
                             <FormField
@@ -111,7 +122,6 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                             Le nom du vin qui apparaîtra dans
                                             l&apos;application
                                         </FormDescription>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -152,7 +162,6 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                             Il s&apos;agit du type tel que
                                             rouge, blanc, rosé
                                         </FormDescription>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -171,23 +180,68 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                     <SelectValue placeholder='Sélectionnez une région' />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {frenchRegions.map(
-                                                        (region) => (
-                                                            <SelectItem
-                                                                key={region}
-                                                                value={region}
-                                                            >
-                                                                {region}
-                                                            </SelectItem>
-                                                        )
-                                                    )}
+                                                    <SelectGroup>
+                                                        <SelectLabel>
+                                                            <div className='flex gap-x-2'>
+                                                                <p className='font-bold border-primary border-b-2'>
+                                                                    Régions
+                                                                    françaises
+                                                                </p>
+                                                                <Image
+                                                                    src='/logos/france.png'
+                                                                    alt='french flag'
+                                                                    width={20}
+                                                                    height={20}
+                                                                />
+                                                            </div>
+                                                        </SelectLabel>
+                                                        {frenchWineRegions.map(
+                                                            (region) => (
+                                                                <SelectItem
+                                                                    key={region}
+                                                                    value={
+                                                                        region
+                                                                    }
+                                                                >
+                                                                    {region}
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectGroup>
+                                                    <SelectGroup>
+                                                        <SelectLabel>
+                                                            <div className='flex gap-x-2'>
+                                                                <p className='font-bold border-primary border-b-2'>
+                                                                    Régions
+                                                                    étrangères
+                                                                </p>
+                                                                <Image
+                                                                    src='/logos/planet.png'
+                                                                    alt='french flag'
+                                                                    width={20}
+                                                                    height={20}
+                                                                />
+                                                            </div>
+                                                        </SelectLabel>
+                                                        {internationalWineRegions.map(
+                                                            (region) => (
+                                                                <SelectItem
+                                                                    key={region}
+                                                                    value={
+                                                                        region
+                                                                    }
+                                                                >
+                                                                    {region}
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectGroup>
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
                                         <FormDescription>
                                             La région où le vin a été produit
                                         </FormDescription>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -216,7 +270,6 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                         <FormDescription>
                                             L&apos;année de production du vin
                                         </FormDescription>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -245,7 +298,6 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                         <FormDescription>
                                             Le prix du vin en euros
                                         </FormDescription>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -275,7 +327,6 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                             Il s&apos;agit du stock actuel du
                                             vin
                                         </FormDescription>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -304,7 +355,6 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                         <FormDescription>
                                             Niveau d&apos;alerte du stock
                                         </FormDescription>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -324,6 +374,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                             <Button
                                 type='submit'
                                 disabled={form.formState.isSubmitting}
+                                className='max-md:mb-4'
                             >
                                 {!form.formState.isSubmitting && 'Créer'}
                                 {form.formState.isSubmitting && (

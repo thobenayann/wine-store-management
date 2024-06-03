@@ -4,6 +4,7 @@ import { DataTableColumnHeader } from '@/components/data-table/ColumnHeader';
 import { DataTableViewOptions } from '@/components/data-table/ColumnToggle';
 import { DataTableFacetedFilter } from '@/components/data-table/FacetedFilters';
 import { Button } from '@/components/ui/button';
+import SkeletonWrapper from '@/components/ui/skeleton-wrapper';
 import {
     Table,
     TableBody,
@@ -13,7 +14,8 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { WineType, wineTypeLabels } from '@/constants/wines';
-import { wineData } from '@/data/fake-wine-data';
+import { Wine } from '@prisma/client';
+import { useQuery } from '@tanstack/react-query';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -127,8 +129,13 @@ function WineTable() {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+    const winesQuery = useQuery({
+        queryKey: ['wines'],
+        queryFn: () => fetch(`/api/wines`).then((res) => res.json()),
+    });
+
     const table = useReactTable({
-        data: wineData,
+        data: winesQuery.data || [],
         columns,
         getCoreRowModel: getCoreRowModel(),
         state: {
@@ -142,46 +149,46 @@ function WineTable() {
         getPaginationRowModel: getPaginationRowModel(),
     });
 
-    const handleExportCSV = (data: any[]) => {
+    const handleExportCSV = (data: Wine[]) => {
         const csv = generateCsv(csvConfig)(data);
         download(csvConfig)(csv);
     };
 
     const wineTypesOptions = useMemo(() => {
         const wineTypesMap = new Map();
-        wineData.forEach((wine) => {
+        winesQuery.data?.forEach((wine: Wine) => {
             wineTypesMap.set(wine.type, {
                 value: wine.type,
-                label: wine.type.charAt(0).toUpperCase() + wine.type.slice(1),
+                label: wineTypeLabels[wine.type],
             });
         });
-        const uniqueWineTypes = Array.from(new Set(wineTypesMap.values()));
+        const uniqueWineTypes = Array.from(wineTypesMap.values());
         return uniqueWineTypes.sort((a, b) => a.label.localeCompare(b.label));
-    }, []);
+    }, [winesQuery.data]);
 
     const wineRegionsOptions = useMemo(() => {
         const wineRegionsMap = new Map();
-        wineData.forEach((wine) => {
+        winesQuery.data?.forEach((wine: Wine) => {
             wineRegionsMap.set(wine.region, {
                 value: wine.region,
                 label: wine.region,
             });
         });
-        const uniqueWineRegions = Array.from(new Set(wineRegionsMap.values()));
+        const uniqueWineRegions = Array.from(wineRegionsMap.values());
         return uniqueWineRegions.sort((a, b) => a.label.localeCompare(b.label));
-    }, []);
+    }, [winesQuery.data]);
 
     const wineYearsOptions = useMemo(() => {
         const wineYearsMap = new Map();
-        wineData.forEach((wine) => {
+        winesQuery.data?.forEach((wine: Wine) => {
             wineYearsMap.set(wine.year, {
                 value: wine.year,
                 label: wine.year.toString(),
             });
         });
-        const uniqueWineYears = Array.from(new Set(wineYearsMap.values()));
+        const uniqueWineYears = Array.from(wineYearsMap.values());
         return uniqueWineYears.sort((a, b) => b.value - a.value);
-    }, []);
+    }, [winesQuery.data]);
 
     return (
         <div className='w-full'>
@@ -229,50 +236,52 @@ function WineTable() {
                 </div>
             </div>
             <div className='rounded-md border'>
-                <Table>
-                    <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                  header.column.columnDef
-                                                      .header,
-                                                  header.getContext()
-                                              )}
-                                    </TableHead>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id}>
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
+                <SkeletonWrapper isLoading={winesQuery.isLoading}>
+                    <Table>
+                        <TableHeader>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <TableRow key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => (
+                                        <TableHead key={header.id}>
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                      header.column.columnDef
+                                                          .header,
+                                                      header.getContext()
+                                                  )}
+                                        </TableHead>
                                     ))}
                                 </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className='h-24 text-start md:text-center'
-                                >
-                                    No results.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+                            ))}
+                        </TableHeader>
+                        <TableBody>
+                            {table.getRowModel().rows.length ? (
+                                table.getRowModel().rows.map((row) => (
+                                    <TableRow key={row.id}>
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={columns.length}
+                                        className='h-24 text-start md:text-center'
+                                    >
+                                        No results.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </SkeletonWrapper>
             </div>
             <div className='flex items-center justify-end space-x-2 py-4'>
                 <Button

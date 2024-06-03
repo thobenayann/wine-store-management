@@ -16,7 +16,7 @@ export async function CreateWine(form: CreateWineSchemaType) {
     }
 
     const session = await getCurrentUserSession();
-    if (!session) {
+    if (!session || !session.user.id) {
         throw new Error('Unauthorized');
     }
 
@@ -31,6 +31,7 @@ export async function CreateWine(form: CreateWineSchemaType) {
             price,
             stock,
             stock_alert,
+            userId: session.user.id,
         },
     });
 }
@@ -41,7 +42,22 @@ export async function DeleteWine(form: DeleteWineSchemaType) {
         throw new Error('Bad request');
     }
 
+    const session = await getCurrentUserSession();
+    if (!session || !session.user.id) {
+        throw new Error('Unauthorized');
+    }
+
     const { id } = parsedBody.data;
+
+    // Check if the wine exists and belongs to the user
+    const wine = await prisma.wine.findUnique({
+        where: { id },
+    });
+
+    if (!wine || wine.userId !== session.user.id) {
+        throw new Error('Unauthorized or wine not found');
+    }
+
     return await prisma.wine.delete({
         where: {
             id,

@@ -26,12 +26,16 @@ model Wine {
   region      String
   year        Int
   price       Float
-  stock       BigInt
-  stock_alert BigInt
+  stock       Int
+  stock_alert Int
   type        WineType
+  userId      String
 
-  Discounts   Discount[]
+  Discounts     Discount[]
   InvoicesLines InvoiceLine[]
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], name: "wines_user_id_index")
 }
 
 model InvoiceLine {
@@ -117,6 +121,9 @@ model User {
   accounts      Account[]
   customers     Customer[]
   invoices      Invoice[]
+  wines         Wine[]
+
+  @@index([id], name: "user_id_index")
 }
 
 model Account {

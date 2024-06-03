@@ -10,18 +10,38 @@ export const getWineTypeLabel = (type: 'RED' | 'WHITE' | 'ROSE') => {
     return wineTypeLabels[type];
 };
 
-export const frenchRegions = [
-    'Auvergne-Rhône-Alpes',
-    'Bourgogne-Franche-Comté',
-    'Bretagne',
-    'Centre-Val de Loire',
+export const frenchWineRegions = [
+    'Alsace',
+    'Beaujolais',
+    'Bordeaux',
+    'Bourgogne',
+    'Champagne',
     'Corse',
-    'Grand Est',
-    'Hauts-de-France',
-    'Île-de-France',
-    'Normandie',
-    'Nouvelle-Aquitaine',
-    'Occitanie',
-    'Pays de la Loire',
-    "Provence-Alpes-Côte d'Azur",
+    'Jura',
+    'Languedoc-Roussillon',
+    'Loire Valley',
+    'Lorraine',
+    'Provence',
+    'Rhône Valley',
+    'Savoie',
+    'Sud-Ouest',
+].sort();
+
+export const internationalWineRegions = [
+    'Australie - Vallée de la Barossa',
+    'Australie - Vallée de Hunter',
+    'Chili - Vallée de Maipo',
+    'Chili - Vallée de Colchagua',
+    'Allemagne - Moselle',
+    'Allemagne - Rheingau',
+    'Italie - Toscane',
+    'Italie - Piémont',
+    'Nouvelle-Zélande - Marlborough',
+    'Portugal - Vallée du Douro',
+    'Afrique du Sud - Stellenbosch',
+    'Espagne - Rioja',
+    'Espagne - Priorat',
+    'États-Unis - Vallée de Napa',
+    'États-Unis - Vallée de Sonoma',
+    'Argentine - Mendoza',
 ].sort();
