@@ -1,3 +1,6 @@
+import CreateCustomerDialog from '@/components/protected/customers/create-customer-dialog';
+import { Button } from '@/components/ui/button';
+import { PlusSquare } from 'lucide-react';
 import UserTable from './_components/customer-table';
 
 export default function Customers() {
@@ -7,14 +10,14 @@ export default function Customers() {
                 <div>
                     <p className='text-3xl font-bold'>Gestion des clients</p>
                 </div>
-                {/* <CreateWineDialog
+                <CreateCustomerDialog
                     trigger={
                         <Button className='gap-2 text-sm'>
                             <PlusSquare className='h-4 w-4' />
-                            Ajouter un vin
+                            Ajouter un client
                         </Button>
                     }
-                /> */}
+                />
             </div>
             <div className='container'>
                 <UserTable />

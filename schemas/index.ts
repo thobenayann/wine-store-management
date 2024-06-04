@@ -101,3 +101,15 @@ export const UpdateWineSchema = z.object({
         .min(0, { message: 'Stock Alert must be a positive number' }),
 });
 export type UpdateWineSchemaType = z.infer<typeof UpdateWineSchema>;
+
+// CUSTOMERS
+export const CreateCustomerSchema = z.object({
+    first_name: z.string().min(1, 'Prénom requis'),
+    last_name: z.string().min(1, 'Nom requis'),
+    email: z.string().email('Email invalide'),
+    phone: z.string().min(1, 'Téléphone requis'),
+    adresse: z.string().min(1, 'Adresse requise'),
+    company: z.string().optional(),
+});
+
+export type CreateCustomerSchemaType = z.infer<typeof CreateCustomerSchema>;
