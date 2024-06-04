@@ -127,7 +127,11 @@ const columns: ColumnDef<WineRow>[] = [
     {
         id: 'actions',
         enableHiding: false,
-        cell: ({ row }) => <RowActions wine={row.original} />,
+        cell: ({ row }) => (
+            <div className='flex items-center gap-2'>
+                <RowActions wine={row.original} />
+            </div>
+        ),
     },
 ];
 

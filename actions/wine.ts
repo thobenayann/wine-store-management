@@ -7,8 +7,10 @@ import {
     CreateWineSchemaType,
     DeleteWineSchema,
     DeleteWineSchemaType,
+    UpdateWineSchemaType,
 } from '@/schemas';
 
+// CREATE WINE
 export async function CreateWine(form: CreateWineSchemaType) {
     const parsedBody = CreateWineSchema.safeParse(form);
     if (!parsedBody.success) {
@@ -50,6 +52,7 @@ export async function CreateWine(form: CreateWineSchemaType) {
     });
 }
 
+// DELETE WINE
 export async function DeleteWine(form: DeleteWineSchemaType) {
     const parsedBody = DeleteWineSchema.safeParse(form);
     if (!parsedBody.success) {
@@ -77,4 +80,25 @@ export async function DeleteWine(form: DeleteWineSchemaType) {
             id,
         },
     });
+}
+
+// UPDATE WINE
+export async function updateWineAction(
+    wine: UpdateWineSchemaType,
+    wineId: string,
+    userId: string
+) {
+    const session = await getCurrentUserSession();
+    if (!session || session.user.id !== userId) {
+        throw new Error('Unauthorized');
+    }
+
+    const updatedWine = await prisma.wine.update({
+        where: { id: wineId },
+        data: {
+            ...wine,
+        },
+    });
+
+    return updatedWine;
 }

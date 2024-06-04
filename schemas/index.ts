@@ -88,3 +88,16 @@ export const DeleteWineSchema = z.object({
     id: z.string().min(1, { message: 'ID is required' }),
 });
 export type DeleteWineSchemaType = z.infer<typeof DeleteWineSchema>;
+
+export const UpdateWineSchema = z.object({
+    name: z.string().min(1, { message: 'Name is required' }),
+    type: z.enum(['RED', 'WHITE', 'ROSE'], { message: 'Type is required' }),
+    region: z.string().min(1, { message: 'Region is required' }),
+    year: z.number().min(1900, { message: 'Year must be a valid year' }),
+    price: z.number().min(0, { message: 'Price must be a positive number' }),
+    stock: z.number().min(0, { message: 'Stock must be a positive number' }),
+    stock_alert: z
+        .number()
+        .min(0, { message: 'Stock Alert must be a positive number' }),
+});
+export type UpdateWineSchemaType = z.infer<typeof UpdateWineSchema>;
