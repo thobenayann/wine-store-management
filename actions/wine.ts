@@ -33,9 +33,7 @@ export async function CreateWine(form: CreateWineSchemaType) {
         },
     });
     if (existingWine) {
-        throw new Error(
-            'Un vin avec ce nom existe déjà pour cet utilisateur 🤷'
-        );
+        throw new Error('Un vin avec ce nom existe déjà pour cet utilisateur');
     }
 
     return await prisma.wine.create({
@@ -82,6 +80,18 @@ export async function DeleteWine(form: DeleteWineSchemaType) {
     });
 }
 
+// Fonction pour vérifier l'existence d'un vin avec le même nom et la même région
+async function wineExistsForUser(name: string, region: string, userId: string) {
+    const existingWine = await prisma.wine.findFirst({
+        where: {
+            name,
+            region,
+            userId,
+        },
+    });
+    return !!existingWine;
+}
+
 // UPDATE WINE
 export async function updateWineAction(
     wine: UpdateWineSchemaType,
@@ -91,6 +101,12 @@ export async function updateWineAction(
     const session = await getCurrentUserSession();
     if (!session || session.user.id !== userId) {
         throw new Error('Unauthorized');
+    }
+
+    // Vérifier si le vin existe déjà pour cet utilisateur
+    const wineExists = await wineExistsForUser(wine.name, wine.region, userId);
+    if (wineExists) {
+        throw new Error('Un vin avec ce nom existe déjà pour cet utilisateur');
     }
 
     const updatedWine = await prisma.wine.update({

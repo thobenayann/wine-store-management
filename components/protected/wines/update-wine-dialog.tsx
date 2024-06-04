@@ -64,7 +64,7 @@ function UpdateWineDialog({ wine, setOpen, open }: UpdateWineDialogProps) {
             await updateWineAction(values, wine.id, wine.userId);
         },
         onSuccess: async () => {
-            toast.success(`Wine ${wine.name} updated successfully! 🎉`);
+            toast.success(`Vin ${wine.name} mis a jour avec succès! 🎉`);
             await queryClient.invalidateQueries({
                 queryKey: ['wines'],
             });
@@ -72,8 +72,19 @@ function UpdateWineDialog({ wine, setOpen, open }: UpdateWineDialogProps) {
             form.reset();
         },
         onError: (error) => {
-            console.error('error', error);
-            toast.error('Failed to update wine data');
+            if (
+                error.message ===
+                'Un vin avec ce nom existe déjà pour cet utilisateur'
+            ) {
+                toast.error(error.message, { id: 'update-wine-already' });
+            } else {
+                toast.error(
+                    `Une erreur s'est produite lors de l'ajout du vin 🤷‍♂️`,
+                    {
+                        id: 'update-wine',
+                    }
+                );
+            }
         },
     });
 
