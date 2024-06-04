@@ -5,6 +5,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { PayedSwitch } from '@/components/ui/payed-switch';
 import {
     Table,
     TableBody,
@@ -13,7 +14,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { PayedSwitch } from '../ui/payed-switch';
 
 export default function Factures() {
     return (
