@@ -1,9 +1,8 @@
-import { auth } from '@/auth';
 import AccountForm from '@/components/protected/profile/account-form';
-import { Session } from 'next-auth';
+import { getCurrentUserSession } from '@/lib/getSession';
 
 async function profilePage() {
-    const session: Session | null = await auth();
+    const session = await getCurrentUserSession();
     return (
         <div className='container mx-auto p-4'>
             <h1 className='text-2xl font-bold mb-4'>Profile</h1>

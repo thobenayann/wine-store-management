@@ -11,9 +11,17 @@ interface NavLinkProps {
     className?: string;
     children?: ReactNode;
     badge?: ReactNode;
+    onClick?: () => void;
 }
 
-const NavLink = ({ name, href, className, children, badge }: NavLinkProps) => {
+const NavLink = ({
+    name,
+    href,
+    className,
+    children,
+    badge,
+    onClick,
+}: NavLinkProps) => {
     const currentPathname = usePathname();
     const isActive = href === currentPathname;
 
@@ -21,6 +29,7 @@ const NavLink = ({ name, href, className, children, badge }: NavLinkProps) => {
         <Link
             href={href}
             className={cn(className, { 'bg-muted text-primary': isActive })}
+            onClick={onClick}
         >
             {children}
             {name}

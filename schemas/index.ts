@@ -69,3 +69,67 @@ export const accountFormSchema = z.object({
             ? z.any()
             : z.instanceof(FileList).optional(),
 });
+
+// WINES
+export const CreateWineSchema = z.object({
+    name: z.string().min(1, { message: 'Name is required' }),
+    type: z.enum(['RED', 'WHITE', 'ROSE'], { message: 'Type is required' }),
+    region: z.string().min(1, { message: 'Region is required' }),
+    year: z.number().min(1900, { message: 'Year must be a valid year' }),
+    price: z.number().min(0, { message: 'Price must be a positive number' }),
+    stock: z.number().min(0, { message: 'Stock must be a positive number' }),
+    stock_alert: z
+        .number()
+        .min(0, { message: 'Stock Alert must be a positive number' }),
+});
+export type CreateWineSchemaType = z.infer<typeof CreateWineSchema>;
+
+export const DeleteWineSchema = z.object({
+    id: z.string().min(1, { message: 'ID is required' }),
+});
+export type DeleteWineSchemaType = z.infer<typeof DeleteWineSchema>;
+
+export const UpdateWineSchema = z.object({
+    name: z.string().min(1, { message: 'Name is required' }),
+    type: z.enum(['RED', 'WHITE', 'ROSE'], { message: 'Type is required' }),
+    region: z.string().min(1, { message: 'Region is required' }),
+    year: z.number().min(1900, { message: 'Year must be a valid year' }),
+    price: z.number().min(0, { message: 'Price must be a positive number' }),
+    stock: z.number().min(0, { message: 'Stock must be a positive number' }),
+    stock_alert: z
+        .number()
+        .min(0, { message: 'Stock Alert must be a positive number' }),
+});
+export type UpdateWineSchemaType = z.infer<typeof UpdateWineSchema>;
+
+// CUSTOMERS
+export const CreateCustomerSchema = z.object({
+    first_name: z.string().min(1, { message: 'Un prénom est requis' }),
+    last_name: z.string().min(1, { message: 'Un nom est requis' }),
+    email: z.string().email({
+        message: 'Veuillez rentrer une adresse email valide',
+    }),
+    phone: z.string().min(1, { message: 'Un numéro de téléphone est requis' }),
+    adresse: z.string().min(1, { message: 'Une adresse est requise' }),
+    company: z.string().optional(),
+});
+
+export type CreateCustomerSchemaType = z.infer<typeof CreateCustomerSchema>;
+
+export const DeleteCustomerSchema = z.object({
+    id: z.string().cuid(),
+});
+export type DeleteCustomerSchemaType = z.infer<typeof DeleteCustomerSchema>;
+
+export const UpdateCustomerSchema = z.object({
+    id: z.string().cuid(),
+    first_name: z.string().min(1, { message: 'Un prénom est requis' }),
+    last_name: z.string().min(1, { message: 'Un nom est requis' }),
+    email: z
+        .string()
+        .email({ message: 'Veuillez rentrer une adresse email valide' }),
+    phone: z.string().min(1, { message: 'Un numéro de téléphone est requis' }),
+    adresse: z.string().min(1, { message: 'Une adresse est requise' }),
+    company: z.string().optional().nullable(),
+});
+export type UpdateCustomerSchemaType = z.infer<typeof UpdateCustomerSchema>;
