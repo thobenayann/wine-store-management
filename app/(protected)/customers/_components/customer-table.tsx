@@ -36,7 +36,8 @@ type CustomerRow = {
     email: string;
     phone: string;
     adresse: string;
-    company?: string;
+    company: string | null;
+    customer_of: string;
 };
 
 const columns: ColumnDef<CustomerRow>[] = [

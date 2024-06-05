@@ -1,5 +1,5 @@
-// import UpdateCustomerDialog from './update-customer-dialog';
 import DeleteCustomerDialog from '@/components/protected/customers/delete-customer.dialog';
+import UpdateCustomerDialog from '@/components/protected/customers/update-customer-dialog';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -14,7 +14,7 @@ import { Edit, MoreHorizontal, TrashIcon } from 'lucide-react';
 import { useState } from 'react';
 
 interface RowCustomerActionsProps {
-    customer: Partial<Customer>;
+    customer: Customer;
 }
 
 export default function RowCustomerActions({
@@ -30,11 +30,11 @@ export default function RowCustomerActions({
                 setOpen={setShowDeleteDialog}
                 customer={customer}
             />
-            {/* <UpdateCustomerDialog
+            <UpdateCustomerDialog
                 open={showUpdateDialog}
                 setOpen={setShowUpdateDialog}
                 customer={customer}
-            /> */}
+            />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant={'ghost'} className='h-8 w-8 p-0 '>

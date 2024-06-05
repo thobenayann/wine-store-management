@@ -1,10 +1,10 @@
 import prisma from '@/lib/db';
 import { getCurrentUserSession } from '@/lib/getSession';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 
 export type GetWinesResponseType = Awaited<ReturnType<typeof getWines>>;
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
     if (req.method !== 'GET') {
         return Response.json({ status: 405 });
     }

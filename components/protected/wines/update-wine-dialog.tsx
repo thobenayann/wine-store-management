@@ -380,12 +380,9 @@ function UpdateWineDialog({ wine, setOpen, open }: UpdateWineDialogProps) {
                                     Annuler
                                 </Button>
                             </DialogClose>
-                            <Button
-                                type='submit'
-                                disabled={form.formState.isSubmitting}
-                            >
-                                {!form.formState.isSubmitting && 'Modifier'}
-                                {form.formState.isSubmitting && (
+                            <Button type='submit' disabled={isPending}>
+                                {!isPending && 'Modifier'}
+                                {isPending && (
                                     <Loader2 className='animate-spin' />
                                 )}
                             </Button>

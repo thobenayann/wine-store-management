@@ -120,3 +120,16 @@ export const DeleteCustomerSchema = z.object({
     id: z.string().cuid(),
 });
 export type DeleteCustomerSchemaType = z.infer<typeof DeleteCustomerSchema>;
+
+export const UpdateCustomerSchema = z.object({
+    id: z.string().cuid(),
+    first_name: z.string().min(1, { message: 'Un prénom est requis' }),
+    last_name: z.string().min(1, { message: 'Un nom est requis' }),
+    email: z
+        .string()
+        .email({ message: 'Veuillez rentrer une adresse email valide' }),
+    phone: z.string().min(1, { message: 'Un numéro de téléphone est requis' }),
+    adresse: z.string().min(1, { message: 'Une adresse est requise' }),
+    company: z.string().optional().nullable(),
+});
+export type UpdateCustomerSchemaType = z.infer<typeof UpdateCustomerSchema>;

@@ -1,15 +1,15 @@
 import prisma from '@/lib/db';
 import { getCurrentUserSession } from '@/lib/getSession';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
     if (req.method !== 'GET') {
         return Response.json({ status: 405 });
     }
     try {
         const session = await getCurrentUserSession();
         if (!session || !session.user) {
-            return res.status(401).json({ error: 'Unauthorized' });
+            return Response.json({ status: 401 });
         }
 
         const customers = await getCustomers();
