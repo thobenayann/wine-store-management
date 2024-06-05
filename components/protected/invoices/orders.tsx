@@ -5,6 +5,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { PayedSwitch } from '@/components/ui/payed-switch';
 import {
     Table,
     TableBody,
@@ -13,7 +14,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { PayedSwitch } from '../ui/payed-switch';
 
 export default function Factures() {
     return (
@@ -32,9 +32,7 @@ export default function Factures() {
                             <TableHead className='hidden sm:table-cell'>
                                 Type
                             </TableHead>
-                            <TableHead className='hidden sm:table-cell'>
-                                Statut
-                            </TableHead>
+                            <TableHead className='table-cell'>Statut</TableHead>
                             <TableHead className='hidden md:table-cell'>
                                 Date
                             </TableHead>
@@ -44,7 +42,7 @@ export default function Factures() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow className='bg-accent'>
+                        <TableRow>
                             <TableCell>
                                 <div className='font-medium'>Liam Johnson</div>
                                 <div className='hidden text-sm text-muted-foreground md:inline'>
@@ -54,7 +52,7 @@ export default function Factures() {
                             <TableCell className='hidden sm:table-cell'>
                                 Vente
                             </TableCell>
-                            <TableCell className='hidden sm:table-cell'>
+                            <TableCell className='table-cell'>
                                 <PayedSwitch status='En cours' />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
@@ -74,7 +72,7 @@ export default function Factures() {
                             <TableCell className='hidden sm:table-cell'>
                                 Remboursement
                             </TableCell>
-                            <TableCell className='hidden sm:table-cell'>
+                            <TableCell className='table-cell'>
                                 <PayedSwitch status='Payée' initialIsOn />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
@@ -94,7 +92,7 @@ export default function Factures() {
                             <TableCell className='hidden sm:table-cell'>
                                 Vente
                             </TableCell>
-                            <TableCell className='hidden sm:table-cell'>
+                            <TableCell className='table-cell'>
                                 <PayedSwitch status='Payée' initialIsOn />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
@@ -114,7 +112,7 @@ export default function Factures() {
                             <TableCell className='hidden sm:table-cell'>
                                 Vente
                             </TableCell>
-                            <TableCell className='hidden sm:table-cell'>
+                            <TableCell className='table-cell'>
                                 <PayedSwitch status='En cours' />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
@@ -134,7 +132,7 @@ export default function Factures() {
                             <TableCell className='hidden sm:table-cell'>
                                 Vente
                             </TableCell>
-                            <TableCell className='hidden sm:table-cell'>
+                            <TableCell className='table-cell'>
                                 <PayedSwitch status='En cours' />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
@@ -154,7 +152,7 @@ export default function Factures() {
                             <TableCell className='hidden sm:table-cell'>
                                 Vente
                             </TableCell>
-                            <TableCell className='hidden sm:table-cell'>
+                            <TableCell className='table-cell'>
                                 <PayedSwitch status='En cours' />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
@@ -174,7 +172,7 @@ export default function Factures() {
                             <TableCell className='hidden sm:table-cell'>
                                 Remboursement
                             </TableCell>
-                            <TableCell className='hidden sm:table-cell'>
+                            <TableCell className='table-cell'>
                                 <PayedSwitch status='Payée' initialIsOn />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
@@ -194,7 +192,7 @@ export default function Factures() {
                             <TableCell className='hidden sm:table-cell'>
                                 Vente
                             </TableCell>
-                            <TableCell className='hidden sm:table-cell'>
+                            <TableCell className='table-cell'>
                                 <PayedSwitch status='En cours' />
                             </TableCell>
                             <TableCell className='hidden md:table-cell'>
