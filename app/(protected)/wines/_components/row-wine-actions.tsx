@@ -13,7 +13,7 @@ import { Wine } from '@prisma/client';
 import { Edit, MoreHorizontal, TrashIcon } from 'lucide-react';
 import { useState } from 'react';
 
-export default function RowActions({ wine }: { wine: Wine }) {
+export default function RowWineActions({ wine }: { wine: Wine }) {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [showUpdateDialog, setShowUpdateDialog] = useState(false);
 

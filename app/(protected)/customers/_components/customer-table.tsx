@@ -26,8 +26,8 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { download, generateCsv } from 'export-to-csv';
-import { Loader2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import RowCustomerActions from './row-customer-actions';
 
 type CustomerRow = {
     id: string;
@@ -81,6 +81,15 @@ const columns: ColumnDef<CustomerRow>[] = [
             <DataTableColumnHeader column={column} title='Entreprise' />
         ),
         cell: ({ row }) => <div>{row.original.company || 'N/A'}</div>,
+    },
+    {
+        id: 'actions',
+        enableHiding: false,
+        cell: ({ row }) => (
+            <div className='flex items-center gap-2'>
+                <RowCustomerActions customer={row.original} />
+            </div>
+        ),
     },
 ];
 
@@ -207,16 +216,6 @@ function CustomerTable() {
                                     >
                                         Pas encore de client référencé.
                                         Commencez par en ajouter un ! 😉
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                            {customersQuery.isRefetching && (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className='text-center'
-                                    >
-                                        <Loader2 className='animate-spin' />
                                     </TableCell>
                                 </TableRow>
                             )}

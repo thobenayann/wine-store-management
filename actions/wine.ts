@@ -81,12 +81,20 @@ export async function DeleteWine(form: DeleteWineSchemaType) {
 }
 
 // Fonction pour vérifier l'existence d'un vin avec le même nom et la même région
-async function wineExistsForUser(name: string, region: string, userId: string) {
+async function wineExistsForUser(
+    name: string,
+    region: string,
+    userId: string,
+    excludeWineId?: string
+) {
     const existingWine = await prisma.wine.findFirst({
         where: {
             name,
             region,
             userId,
+            NOT: {
+                id: excludeWineId,
+            },
         },
     });
     return !!existingWine;
@@ -103,8 +111,13 @@ export async function updateWineAction(
         throw new Error('Unauthorized');
     }
 
-    // Vérifier si le vin existe déjà pour cet utilisateur
-    const wineExists = await wineExistsForUser(wine.name, wine.region, userId);
+    // Vérifier si le vin existe déjà pour cet utilisateur en excluant le vin actuel
+    const wineExists = await wineExistsForUser(
+        wine.name,
+        wine.region,
+        userId,
+        wineId
+    );
     if (wineExists) {
         throw new Error('Un vin avec ce nom existe déjà pour cet utilisateur');
     }

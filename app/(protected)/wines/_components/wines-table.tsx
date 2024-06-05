@@ -29,9 +29,8 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { Loader2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import RowActions from './row-actions';
+import RowWineActions from './row-wine-actions';
 
 const emptyData: any[] = [];
 
@@ -129,7 +128,7 @@ const columns: ColumnDef<WineRow>[] = [
         enableHiding: false,
         cell: ({ row }) => (
             <div className='flex items-center gap-2'>
-                <RowActions wine={row.original} />
+                <RowWineActions wine={row.original} />
             </div>
         ),
     },
@@ -293,16 +292,6 @@ function WineTable() {
                                     >
                                         Pas de vins trouvés, commencez par en
                                         ajouter un ! 😉
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                            {winesQuery.isRefetching && (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className='text-center'
-                                    >
-                                        <Loader2 className='animate-spin' />
                                     </TableCell>
                                 </TableRow>
                             )}

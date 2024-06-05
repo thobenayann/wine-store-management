@@ -2,8 +2,14 @@
 
 import prisma from '@/lib/db';
 import { getCurrentUserSession } from '@/lib/getSession';
-import { CreateCustomerSchema, CreateCustomerSchemaType } from '@/schemas';
+import {
+    CreateCustomerSchema,
+    CreateCustomerSchemaType,
+    DeleteCustomerSchema,
+    DeleteCustomerSchemaType,
+} from '@/schemas';
 
+// CREATE CUSTOMER
 export async function CreateCustomer(form: CreateCustomerSchemaType) {
     const parsedBody = CreateCustomerSchema.safeParse(form);
 
@@ -41,6 +47,36 @@ export async function CreateCustomer(form: CreateCustomerSchemaType) {
             adresse,
             company,
             customer_of: session.user.id,
+        },
+    });
+}
+
+// DELETE CUSTOMER
+export async function DeleteCustomer(form: DeleteCustomerSchemaType) {
+    const parsedBody = DeleteCustomerSchema.safeParse(form);
+    if (!parsedBody.success) {
+        throw new Error('Bad request');
+    }
+
+    const session = await getCurrentUserSession();
+    if (!session || !session.user.id) {
+        throw new Error('Unauthorized');
+    }
+
+    const { id } = parsedBody.data;
+
+    // Check if the customer exists and belongs to the user
+    const customer = await prisma.customer.findUnique({
+        where: { id },
+    });
+
+    if (!customer || customer.customer_of !== session.user.id) {
+        throw new Error('Unauthorized or customer not found');
+    }
+
+    return await prisma.customer.delete({
+        where: {
+            id,
         },
     });
 }

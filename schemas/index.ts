@@ -115,3 +115,8 @@ export const CreateCustomerSchema = z.object({
 });
 
 export type CreateCustomerSchemaType = z.infer<typeof CreateCustomerSchema>;
+
+export const DeleteCustomerSchema = z.object({
+    id: z.string().cuid(),
+});
+export type DeleteCustomerSchemaType = z.infer<typeof DeleteCustomerSchema>;
