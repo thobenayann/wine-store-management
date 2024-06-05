@@ -40,7 +40,7 @@ function CreateCustomerDialog({ trigger }: CreateCustomerDialogProps) {
     });
 
     const queryClient = useQueryClient();
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: CreateCustomer,
         onSuccess: async (data) => {
             toast.success(
@@ -102,17 +102,31 @@ function CreateCustomerDialog({ trigger }: CreateCustomerDialogProps) {
                             <FormField
                                 control={form.control}
                                 name='first_name'
-                                render={({ field }) => (
+                                render={({ field, fieldState }) => (
                                     <FormItem>
                                         <FormLabel>Prénom</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder='Prénom du client'
                                                 {...field}
+                                                disabled={isPending}
+                                                className={
+                                                    fieldState.error
+                                                        ? 'animate-shake border-red-500'
+                                                        : ''
+                                                }
                                             />
                                         </FormControl>
-                                        <FormDescription>
-                                            Le prénom du client
+                                        <FormDescription
+                                            className={
+                                                fieldState.error
+                                                    ? 'animate-shake text-red-500'
+                                                    : ''
+                                            }
+                                        >
+                                            {fieldState.error
+                                                ? 'Le prénom est requis'
+                                                : 'Le prénom du client'}
                                         </FormDescription>
                                     </FormItem>
                                 )}
@@ -120,17 +134,31 @@ function CreateCustomerDialog({ trigger }: CreateCustomerDialogProps) {
                             <FormField
                                 control={form.control}
                                 name='last_name'
-                                render={({ field }) => (
+                                render={({ field, fieldState }) => (
                                     <FormItem>
                                         <FormLabel>Nom</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder='Nom du client'
                                                 {...field}
+                                                disabled={isPending}
+                                                className={
+                                                    fieldState.error
+                                                        ? 'animate-shake border-red-500'
+                                                        : ''
+                                                }
                                             />
                                         </FormControl>
-                                        <FormDescription>
-                                            Le nom du client
+                                        <FormDescription
+                                            className={
+                                                fieldState.error
+                                                    ? 'animate-shake text-red-500'
+                                                    : ''
+                                            }
+                                        >
+                                            {fieldState.error
+                                                ? 'Le nom est requis'
+                                                : 'Le nom du client'}
                                         </FormDescription>
                                     </FormItem>
                                 )}
@@ -138,7 +166,7 @@ function CreateCustomerDialog({ trigger }: CreateCustomerDialogProps) {
                             <FormField
                                 control={form.control}
                                 name='email'
-                                render={({ field }) => (
+                                render={({ field, fieldState }) => (
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
                                         <FormControl>
@@ -146,10 +174,24 @@ function CreateCustomerDialog({ trigger }: CreateCustomerDialogProps) {
                                                 type='email'
                                                 placeholder='Email du client'
                                                 {...field}
+                                                disabled={isPending}
+                                                className={
+                                                    fieldState.error
+                                                        ? 'animate-shake border-red-500'
+                                                        : ''
+                                                }
                                             />
                                         </FormControl>
-                                        <FormDescription>
-                                            L&apos;adresse email du client
+                                        <FormDescription
+                                            className={
+                                                fieldState.error
+                                                    ? 'animate-shake text-red-500'
+                                                    : ''
+                                            }
+                                        >
+                                            {fieldState.error
+                                                ? "L'email est requis"
+                                                : "L'adresse email du client"}
                                         </FormDescription>
                                     </FormItem>
                                 )}
@@ -157,17 +199,31 @@ function CreateCustomerDialog({ trigger }: CreateCustomerDialogProps) {
                             <FormField
                                 control={form.control}
                                 name='phone'
-                                render={({ field }) => (
+                                render={({ field, fieldState }) => (
                                     <FormItem>
                                         <FormLabel>Téléphone</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder='Téléphone du client'
                                                 {...field}
+                                                disabled={isPending}
+                                                className={
+                                                    fieldState.error
+                                                        ? 'animate-shake border-red-500'
+                                                        : ''
+                                                }
                                             />
                                         </FormControl>
-                                        <FormDescription>
-                                            Le numéro de téléphone du client
+                                        <FormDescription
+                                            className={
+                                                fieldState.error
+                                                    ? 'animate-shake text-red-500'
+                                                    : ''
+                                            }
+                                        >
+                                            {fieldState.error
+                                                ? 'Téléphone requis'
+                                                : 'Le numéro de téléphone du client'}
                                         </FormDescription>
                                     </FormItem>
                                 )}
@@ -175,17 +231,31 @@ function CreateCustomerDialog({ trigger }: CreateCustomerDialogProps) {
                             <FormField
                                 control={form.control}
                                 name='adresse'
-                                render={({ field }) => (
+                                render={({ field, fieldState }) => (
                                     <FormItem>
                                         <FormLabel>Adresse</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder='Adresse du client'
                                                 {...field}
+                                                disabled={isPending}
+                                                className={
+                                                    fieldState.error
+                                                        ? 'animate-shake border-red-500'
+                                                        : ''
+                                                }
                                             />
                                         </FormControl>
-                                        <FormDescription>
-                                            L&apos;adresse du client
+                                        <FormDescription
+                                            className={
+                                                fieldState.error
+                                                    ? 'animate-shake text-red-500'
+                                                    : ''
+                                            }
+                                        >
+                                            {fieldState.error
+                                                ? "L'adresse est requise"
+                                                : "L'adresse du client"}
                                         </FormDescription>
                                     </FormItem>
                                 )}
@@ -202,6 +272,7 @@ function CreateCustomerDialog({ trigger }: CreateCustomerDialogProps) {
                                             <Input
                                                 placeholder="Nom de l'entreprise du client"
                                                 {...field}
+                                                disabled={isPending}
                                             />
                                         </FormControl>
                                         <FormDescription>
@@ -226,11 +297,11 @@ function CreateCustomerDialog({ trigger }: CreateCustomerDialogProps) {
                             </DialogClose>
                             <Button
                                 type='submit'
-                                disabled={form.formState.isSubmitting}
+                                disabled={isPending}
                                 className='max-md:mb-4'
                             >
-                                {!form.formState.isSubmitting && 'Créer'}
-                                {form.formState.isSubmitting && (
+                                {!isPending && 'Créer'}
+                                {isPending && (
                                     <Loader2 className='animate-spin' />
                                 )}
                             </Button>

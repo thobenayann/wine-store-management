@@ -57,7 +57,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
     });
 
     const queryClient = useQueryClient();
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: CreateWine,
         onSuccess: async (data) => {
             toast.success(`Le vin ${data?.name} a été ajouté! 🎉`, {
@@ -125,6 +125,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                             <Input
                                                 placeholder='Nom du vin'
                                                 {...field}
+                                                disabled={isPending}
                                             />
                                         </FormControl>
                                         <FormDescription className='max-sm:text-xs'>
@@ -144,6 +145,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                             <Select
                                                 onValueChange={field.onChange}
                                                 defaultValue={field.value}
+                                                disabled={isPending}
                                             >
                                                 <SelectTrigger>
                                                     <SelectValue placeholder='Type de vin' />
@@ -184,6 +186,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                             <Select
                                                 onValueChange={field.onChange}
                                                 defaultValue={field.value}
+                                                disabled={isPending}
                                             >
                                                 <SelectTrigger>
                                                     <SelectValue placeholder='Sélectionnez une région' />
@@ -274,6 +277,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 }
                                                 min='1900'
                                                 placeholder='Year'
+                                                disabled={isPending}
                                             />
                                         </FormControl>
                                         <FormDescription className='max-sm:text-xs'>
@@ -302,6 +306,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 min='0'
                                                 step='0.01'
                                                 placeholder='Price'
+                                                disabled={isPending}
                                             />
                                         </FormControl>
                                         <FormDescription className='max-sm:text-xs'>
@@ -330,6 +335,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                 }
                                                 min='0'
                                                 placeholder='Stock'
+                                                disabled={isPending}
                                             />
                                         </FormControl>
                                         <FormDescription className='max-sm:text-xs'>
@@ -359,6 +365,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                                     )
                                                 }
                                                 placeholder='Stock Alert'
+                                                disabled={isPending}
                                             />
                                         </FormControl>
                                         <FormDescription className='max-sm:text-xs'>
@@ -382,11 +389,11 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                             </DialogClose>
                             <Button
                                 type='submit'
-                                disabled={form.formState.isSubmitting}
+                                disabled={isPending}
                                 className='max-md:mb-4'
                             >
-                                {!form.formState.isSubmitting && 'Créer'}
-                                {form.formState.isSubmitting && (
+                                {!isPending && 'Créer'}
+                                {isPending && (
                                     <Loader2 className='animate-spin' />
                                 )}
                             </Button>

@@ -21,7 +21,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     }
 }
 
-export async function getWines() {
+async function getWines() {
     const session = await getCurrentUserSession();
     if (!session) {
         throw new Error('Unauthorized');

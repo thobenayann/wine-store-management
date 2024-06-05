@@ -104,11 +104,13 @@ export type UpdateWineSchemaType = z.infer<typeof UpdateWineSchema>;
 
 // CUSTOMERS
 export const CreateCustomerSchema = z.object({
-    first_name: z.string().min(1, 'Prénom requis'),
-    last_name: z.string().min(1, 'Nom requis'),
-    email: z.string().email('Email invalide'),
-    phone: z.string().min(1, 'Téléphone requis'),
-    adresse: z.string().min(1, 'Adresse requise'),
+    first_name: z.string().min(1, { message: 'Un prénom est requis' }),
+    last_name: z.string().min(1, { message: 'Un nom est requis' }),
+    email: z.string().email({
+        message: 'Veuillez rentrer une adresse email valide',
+    }),
+    phone: z.string().min(1, { message: 'Un numéro de téléphone est requis' }),
+    adresse: z.string().min(1, { message: 'Une adresse est requise' }),
     company: z.string().optional(),
 });
 
