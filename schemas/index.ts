@@ -175,3 +175,23 @@ export const OrderSchema = z.object({
 
 export type Order = z.infer<typeof OrderSchema>;
 export type OrderLine = z.infer<typeof OrderLineSchema>;
+
+export const CreateOrderSchema = z.object({
+    client_id: z.string().cuid().min(1, 'Le client est requis'),
+    lines: z
+        .array(
+            z.object({
+                wine_id: z.string().cuid().min(1, 'Le vin est requis'),
+                quantity: z
+                    .number()
+                    .min(1, 'La quantité doit être au moins de 1'),
+                unit_price: z
+                    .number()
+                    .min(0, 'Le prix unitaire doit être positif'),
+                discount: z.number().min(0).optional(),
+            })
+        )
+        .min(1, 'Au moins une ligne de commande est requise'),
+});
+
+export type CreateOrderSchemaType = z.infer<typeof CreateOrderSchema>;

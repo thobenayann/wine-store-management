@@ -1,3 +1,6 @@
+import CreateOrderDialog from '@/components/protected/orders/create-order-dialog';
+import { Button } from '@/components/ui/button';
+import { PlusSquare } from 'lucide-react';
 import OrdersTable from './_components/orders-table';
 
 export default function Orders() {
@@ -9,14 +12,14 @@ export default function Orders() {
                         Gestion des commandes
                     </p>
                 </div>
-                {/* <CreateWineDialog
+                <CreateOrderDialog
                     trigger={
                         <Button className='gap-2 text-sm'>
                             <PlusSquare className='h-4 w-4' />
-                            Ajouter un vin
+                            Ajouter une commande
                         </Button>
                     }
-                /> */}
+                />
             </div>
             <div className='container'>
                 <OrdersTable />
