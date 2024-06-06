@@ -133,3 +133,45 @@ export const UpdateCustomerSchema = z.object({
     company: z.string().optional().nullable(),
 });
 export type UpdateCustomerSchemaType = z.infer<typeof UpdateCustomerSchema>;
+
+// ORDERS
+export const OrderStatusSchema = z.enum([
+    'PENDING',
+    'CONFIRMED',
+    'FULFILLED',
+    'INVOICED',
+    'CANCELLED',
+]);
+export type OrderStatus = z.infer<typeof OrderStatusSchema>;
+
+export const OrderLineSchema = z.object({
+    id: z.string().cuid(),
+    quantity: z.number().int(),
+    unit_price: z.number(),
+    total: z.number(),
+    discount: z.number().optional().nullable(),
+    order_id: z.string().cuid(),
+    wine_id: z.string().cuid(),
+});
+
+export const OrderSchema = z.object({
+    id: z.string().cuid(),
+    created_at: z.string(),
+    updated_at: z.string(),
+    status: OrderStatusSchema,
+    author_id: z.string().cuid(),
+    client_id: z.string().cuid(),
+    lines: z.array(OrderLineSchema),
+    client: z.object({
+        id: z.string().cuid(),
+        first_name: z.string(),
+        last_name: z.string(),
+        email: z.string().email(),
+        phone: z.string(),
+        adresse: z.string(),
+        company: z.string().optional().nullable(),
+    }),
+});
+
+export type Order = z.infer<typeof OrderSchema>;
+export type OrderLine = z.infer<typeof OrderLineSchema>;

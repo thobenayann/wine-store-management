@@ -1,28 +1,25 @@
-import CreateCustomerDialog from '@/components/protected/customers/create-customer-dialog';
-import { Button } from '@/components/ui/button';
-import { PlusSquare } from 'lucide-react';
-import UserTable from './_components/customer-table';
+import OrdersTable from './_components/orders-table';
 
-export default function Customers() {
+export default function Orders() {
     return (
         <main>
             <div className='container flex max-md:flex-col items-center justify-between gap-6 py-8'>
                 <div>
                     <p className='text-3xl font-bold max-md:text-center'>
-                        Gestion des clients
+                        Gestion des commandes
                     </p>
                 </div>
-                <CreateCustomerDialog
+                {/* <CreateWineDialog
                     trigger={
                         <Button className='gap-2 text-sm'>
                             <PlusSquare className='h-4 w-4' />
-                            Ajouter un client
+                            Ajouter un vin
                         </Button>
                     }
-                />
+                /> */}
             </div>
             <div className='container'>
-                <UserTable />
+                <OrdersTable />
             </div>
         </main>
     );

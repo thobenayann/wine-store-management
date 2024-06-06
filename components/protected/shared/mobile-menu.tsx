@@ -3,7 +3,15 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Euro, Home, Menu, UserRoundCog, Users, Wine } from 'lucide-react';
+import {
+    Euro,
+    Home,
+    Menu,
+    ShoppingCart,
+    UserRoundCog,
+    Users,
+    Wine,
+} from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import NavLink from './nav-link';
@@ -53,14 +61,22 @@ export default function MobileMenu() {
                         <Home className='h-4 w-4' />
                     </NavLink>
                     <NavLink
-                        href='/invoices'
-                        name='Facturation'
-                        className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-foreground hover:text-foreground'
+                        href='/orders'
+                        name='Commandes'
+                        className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 hover:text-foreground'
+                        onClick={handleClose}
                         badge={
                             <Badge className='ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full'>
                                 6
                             </Badge>
                         }
+                    >
+                        <ShoppingCart className='h-4 w-4' />
+                    </NavLink>
+                    <NavLink
+                        href='/invoices'
+                        name='Facturation'
+                        className='mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-foreground hover:text-foreground'
                         onClick={handleClose}
                     >
                         <Euro className='h-5 w-5' />

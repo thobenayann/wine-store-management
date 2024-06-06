@@ -15,7 +15,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 
-export default function Factures() {
+function InvoicesTable() {
     return (
         <Card>
             <CardHeader className='px-7'>
@@ -208,3 +208,5 @@ export default function Factures() {
         </Card>
     );
 }
+
+export default InvoicesTable;
