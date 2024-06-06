@@ -156,8 +156,8 @@ export const OrderLineSchema = z.object({
 
 export const OrderSchema = z.object({
     id: z.string().cuid(),
-    created_at: z.string(),
-    updated_at: z.string(),
+    created_at: z.date(),
+    updated_at: z.date(),
     status: OrderStatusSchema,
     author_id: z.string().cuid(),
     client_id: z.string().cuid(),
@@ -195,3 +195,8 @@ export const CreateOrderSchema = z.object({
 });
 
 export type CreateOrderSchemaType = z.infer<typeof CreateOrderSchema>;
+
+export const DeleteOrderSchema = z.object({
+    id: z.string().cuid().min(1, { message: 'ID is required' }),
+});
+export type DeleteOrderSchemaType = z.infer<typeof DeleteOrderSchema>;

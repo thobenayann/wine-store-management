@@ -29,6 +29,7 @@ import {
 import { Redo2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import RowOrderActions from './row-order-actions';
 
 const emptyData: any[] = [];
 
@@ -82,6 +83,15 @@ const columns: ColumnDef<Order>[] = [
             );
             return `${total.toFixed(2)} €`;
         },
+    },
+    {
+        id: 'actions',
+        enableHiding: false,
+        cell: ({ row }) => (
+            <div className='flex items-center gap-2'>
+                <RowOrderActions order={row.original} />
+            </div>
+        ),
     },
 ];
 

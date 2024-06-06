@@ -199,7 +199,7 @@ function CreateOrderDialog({ trigger }: CreateOrderDialogProps) {
                                     {fields.map((field, index) => (
                                         <div
                                             key={field.id}
-                                            className='grid grid-cols-6 gap-4'
+                                            className='grid grid-cols-2 max-md:border-b-2 max-md:pb-2 md:grid-cols-6 gap-4'
                                         >
                                             <FormField
                                                 control={form.control}
@@ -387,8 +387,27 @@ function CreateOrderDialog({ trigger }: CreateOrderDialogProps) {
                                                             <Input
                                                                 type='number'
                                                                 {...field}
+                                                                value={
+                                                                    field.value
+                                                                }
+                                                                onChange={(
+                                                                    e
+                                                                ) => {
+                                                                    const value =
+                                                                        parseFloat(
+                                                                            e
+                                                                                .target
+                                                                                .value
+                                                                        );
+                                                                    field.onChange(
+                                                                        value >=
+                                                                            0
+                                                                            ? value
+                                                                            : 0
+                                                                    );
+                                                                }}
                                                                 min='0'
-                                                                step='0.01'
+                                                                step='1'
                                                                 placeholder='Remise'
                                                                 disabled={
                                                                     isPending
@@ -453,6 +472,7 @@ function CreateOrderDialog({ trigger }: CreateOrderDialogProps) {
                                 type='submit'
                                 disabled={isPending}
                                 onClick={handleCreateClick}
+                                className='max-md:mb-4'
                             >
                                 {!isPending && 'Créer'}
                                 {isPending && (

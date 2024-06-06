@@ -2,7 +2,11 @@
 
 import prisma from '@/lib/db';
 import { getCurrentUserSession } from '@/lib/getSession';
-import { CreateOrderSchemaType } from '@/schemas';
+import {
+    CreateOrderSchemaType,
+    DeleteOrderSchema,
+    DeleteOrderSchemaType,
+} from '@/schemas';
 
 export async function CreateOrder(data: CreateOrderSchemaType) {
     const session = await getCurrentUserSession();
@@ -63,4 +67,34 @@ export async function CreateOrder(data: CreateOrderSchemaType) {
     });
 
     return order;
+}
+
+// DELETE ORDER
+export async function DeleteOrder(form: DeleteOrderSchemaType) {
+    const parsedBody = DeleteOrderSchema.safeParse(form);
+    if (!parsedBody.success) {
+        throw new Error('Bad request');
+    }
+
+    const session = await getCurrentUserSession();
+    if (!session || !session.user.id) {
+        throw new Error('Unauthorized');
+    }
+
+    const { id } = parsedBody.data;
+
+    // Check if the order exists and belongs to the user
+    const order = await prisma.order.findUnique({
+        where: { id },
+    });
+
+    if (!order || order.author_id !== session.user.id) {
+        throw new Error('Unauthorized or order not found');
+    }
+
+    return await prisma.order.delete({
+        where: {
+            id,
+        },
+    });
 }
