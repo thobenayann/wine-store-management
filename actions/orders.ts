@@ -33,14 +33,7 @@ export async function CreateOrder(data: CreateOrderSchemaType) {
         if (!wine) {
             throw new Error(`Wine with ID ${line.wine_id} not found`);
         }
-        if (wine.stock < line.quantity) {
-            throw new Error(`Insufficient stock for wine ${wine.name}`);
-        }
-        // Update wine stock
-        await prisma.wine.update({
-            where: { id: line.wine_id },
-            data: { stock: { decrement: line.quantity } },
-        });
+
         orderLines.push({
             wine_id: line.wine_id,
             quantity: line.quantity,
@@ -129,34 +122,86 @@ export async function updateOrderStatus({
         throw new Error('Unauthorized');
     }
 
-    if (status === 'FULFILLED') {
-        const order = await prisma.$transaction(async (prisma) => {
-            const order = await prisma.order.update({
+    const order = await prisma.order.findUnique({
+        where: { id: orderId },
+        include: {
+            lines: true,
+            client: true,
+        },
+    });
+
+    if (!order || order.author_id !== session.user.id) {
+        throw new Error('Unauthorized or order not found');
+    }
+
+    switch (status) {
+        case 'FULFILLED':
+            // Update the order status and decrement the wine stock
+            return await prisma.$transaction(async (prisma) => {
+                const updatedOrder = await prisma.order.update({
+                    where: { id: orderId },
+                    data: { status },
+                    include: { lines: true },
+                });
+
+                const stockUpdates = updatedOrder.lines.map((line) =>
+                    prisma.wine.update({
+                        where: { id: line.wine_id },
+                        data: { stock: { decrement: line.quantity } },
+                    })
+                );
+
+                await Promise.all(stockUpdates);
+                return updatedOrder;
+            });
+
+        case 'INVOICED':
+            if (order.status !== 'FULFILLED') {
+                throw new Error('Only fulfilled orders can be invoiced');
+            }
+
+            const authorId = session.user.id;
+            if (!authorId) {
+                throw new Error('Author ID is required');
+            }
+
+            return await prisma.$transaction(async (prisma) => {
+                // Create an invoice
+                const invoice = await prisma.invoice.create({
+                    data: {
+                        reference: `INV-${order.id}`,
+                        due_date: new Date(
+                            new Date().setDate(new Date().getDate() + 30)
+                        ), // Due date set to 30 days from now
+                        status: 'PENDING',
+                        author_id: authorId,
+                        client_id: order.client_id,
+                        lines: {
+                            create: order.lines.map((line) => ({
+                                wine_id: line.wine_id,
+                                quantity: line.quantity,
+                                unit_price: line.unit_price,
+                                total: line.total,
+                                discount: line.discount,
+                            })),
+                        },
+                    },
+                });
+
+                // Update the order status to INVOICED
+                const updatedOrder = await prisma.order.update({
+                    where: { id: orderId },
+                    data: { status },
+                });
+
+                return updatedOrder;
+            });
+
+        default:
+            // Update the order status only
+            return await prisma.order.update({
                 where: { id: orderId },
                 data: { status },
-                include: { lines: true },
             });
-
-            // Update the stock of each wine in the order
-            const stockUpdates = order.lines.map((line) => {
-                return prisma.wine.update({
-                    where: { id: line.wine_id },
-                    data: { stock: { decrement: line.quantity } },
-                });
-            });
-
-            // Execute all stock updates in parallel
-            await Promise.all(stockUpdates);
-
-            return order;
-        });
-
-        return order;
-    } else {
-        // Update the order status only
-        return await prisma.order.update({
-            where: { id: orderId },
-            data: { status },
-        });
     }
 }
