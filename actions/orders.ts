@@ -88,16 +88,34 @@ export async function DeleteOrder(form: DeleteOrderSchemaType) {
     // Check if the order exists and belongs to the user
     const order = await prisma.order.findUnique({
         where: { id },
+        include: {
+            lines: true,
+        },
     });
 
     if (!order || order.author_id !== session.user.id) {
         throw new Error('Unauthorized or order not found');
     }
 
+    // If the order is fulfilled, increment the stock of the wines
+    if (order.status === 'FULFILLED') {
+        const updateStockPromises = order.lines.map((line) =>
+            prisma.wine.update({
+                where: { id: line.wine_id },
+                data: {
+                    stock: {
+                        increment: line.quantity,
+                    },
+                },
+            })
+        );
+
+        await Promise.all(updateStockPromises);
+    }
+
+    // Delete the order
     return await prisma.order.delete({
-        where: {
-            id,
-        },
+        where: { id },
     });
 }
 
