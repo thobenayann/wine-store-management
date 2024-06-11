@@ -1,5 +1,6 @@
 'use client';
 
+import { updateOrderStatus } from '@/actions/orders';
 import { GetOrderByIdResponseType } from '@/app/api/orders/order-detail/route';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,12 +16,15 @@ import {
 } from '@/components/ui/table';
 import { statusColor } from '@/constants/orders';
 import { formatDate, translateOrderStatus } from '@/lib/helpers';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, X } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 function OrderDetails() {
+    const router = useRouter();
     const params = useParams();
+    const queryClient = useQueryClient();
     const { id: orderId } = params;
     const { data: order, isLoading } = useQuery<GetOrderByIdResponseType>({
         queryKey: ['order-by-id'],
@@ -31,29 +35,51 @@ function OrderDetails() {
         enabled: !!orderId,
     });
 
+    const mutation = useMutation({
+        mutationFn: updateOrderStatus,
+        onSuccess: async (data) => {
+            toast.success(
+                `La commande est à présent marquée comme ${translateOrderStatus(
+                    data.status
+                )}.`,
+                {
+                    id: 'update-order-status',
+                }
+            );
+            // Invalidate and refetch
+            await queryClient.invalidateQueries({
+                queryKey: ['order-by-id', orderId],
+            });
+            // Invalidate the wines related to the order
+            if (order?.lines) {
+                const wineIds = order.lines.map((line) => line.wine_id);
+                wineIds.forEach((wineId) => {
+                    queryClient.invalidateQueries({
+                        queryKey: ['wine', wineId],
+                    });
+                });
+            }
+            router.push('/orders');
+        },
+        onError: (error: any) => {
+            console.error(error);
+            toast.error(
+                `Echec lors de la modification du statut de la commande`,
+                {
+                    id: 'update-order-status-failed',
+                }
+            );
+        },
+    });
+
     if (!order) return null;
 
     const isOrderFulfillable = order?.lines?.every(
         (line) => line.wine.stock >= line.quantity
     );
 
-    const handleUpdateStatus = async (status: 'FULFILLED' | 'CONFIRMED') => {
-        try {
-            const res = await fetch(`/api/orders/${order.id}/status`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status }),
-            });
-
-            if (res.ok) {
-                const updatedOrder = await res.json();
-                // setOrder(updatedOrder); // Assurez-vous de définir `setOrder` si nécessaire
-            } else {
-                console.error('Failed to update order status');
-            }
-        } catch (error) {
-            console.error('Error updating order status:', error);
-        }
+    const handleUpdateStatus = (status: 'FULFILLED' | 'CONFIRMED') => {
+        mutation.mutate({ orderId: order.id, status });
     };
 
     const orderDate = order.created_at
@@ -152,6 +178,7 @@ function OrderDetails() {
                             </div>
                             <Button
                                 onClick={() => handleUpdateStatus('FULFILLED')}
+                                className='md:w-fit'
                             >
                                 Marquée comme honorée
                             </Button>
@@ -170,6 +197,7 @@ function OrderDetails() {
                             </div>
                             <Button
                                 onClick={() => handleUpdateStatus('CONFIRMED')}
+                                className='md:w-fit'
                             >
                                 Marquée comme confirmée
                             </Button>

@@ -111,8 +111,34 @@ export async function updateOrderStatus({
         throw new Error('Unauthorized');
     }
 
-    return await prisma.order.update({
-        where: { id: orderId },
-        data: { status },
-    });
+    if (status === 'FULFILLED') {
+        const order = await prisma.$transaction(async (prisma) => {
+            const order = await prisma.order.update({
+                where: { id: orderId },
+                data: { status },
+                include: { lines: true },
+            });
+
+            // Update the stock of each wine in the order
+            const stockUpdates = order.lines.map((line) => {
+                return prisma.wine.update({
+                    where: { id: line.wine_id },
+                    data: { stock: { decrement: line.quantity } },
+                });
+            });
+
+            // Execute all stock updates in parallel
+            await Promise.all(stockUpdates);
+
+            return order;
+        });
+
+        return order;
+    } else {
+        // Update the order status only
+        return await prisma.order.update({
+            where: { id: orderId },
+            data: { status },
+        });
+    }
 }
