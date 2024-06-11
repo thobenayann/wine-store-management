@@ -13,7 +13,9 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { statusColor } from '@/constants/orders';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { translateOrderStatus } from '@/lib/helpers';
 import { Order } from '@/schemas';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -57,16 +59,9 @@ const columns: ColumnDef<Order>[] = [
         ),
         cell: ({ row }) => {
             const status = row.original.status;
-            const statusColor = {
-                PENDING: 'bg-yellow-100 text-yellow-800',
-                CONFIRMED: 'bg-blue-100 text-blue-800',
-                FULFILLED: 'bg-green-100 text-green-800',
-                INVOICED: 'bg-purple-100 text-purple-800',
-                CANCELLED: 'bg-red-100 text-red-800',
-            };
             return (
                 <Badge variant='outline' className={statusColor[status]}>
-                    {status}
+                    {translateOrderStatus(status)}
                 </Badge>
             );
         },
@@ -124,13 +119,6 @@ const OrderTable = () => {
         <div className='w-full'>
             <div className='flex flex-wrap items-end justify-between gap-2 py-4'>
                 <div className='flex flex-wrap gap-2'>
-                    <Button
-                        variant={'outline'}
-                        size={'sm'}
-                        className='ml-auto h-8 lg:flex'
-                    >
-                        Export CSV
-                    </Button>
                     <DataTableViewOptions table={table} />
                 </div>
             </div>

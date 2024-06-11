@@ -152,6 +152,11 @@ export const OrderLineSchema = z.object({
     discount: z.number().optional().nullable(),
     order_id: z.string().cuid(),
     wine_id: z.string().cuid(),
+    wine: z.object({
+        id: z.string().cuid(),
+        name: z.string(),
+        stock: z.number(),
+    }),
 });
 
 export const OrderSchema = z.object({
@@ -200,3 +205,18 @@ export const DeleteOrderSchema = z.object({
     id: z.string().cuid().min(1, { message: 'ID is required' }),
 });
 export type DeleteOrderSchemaType = z.infer<typeof DeleteOrderSchema>;
+
+export const UpdateOrderStatusSchema = z.object({
+    orderId: z.string().cuid(),
+    status: z.enum([
+        'PENDING',
+        'CONFIRMED',
+        'FULFILLED',
+        'INVOICED',
+        'CANCELLED',
+    ]),
+});
+
+export type UpdateOrderStatusSchemaType = z.infer<
+    typeof UpdateOrderStatusSchema
+>;

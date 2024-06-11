@@ -9,7 +9,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Order } from '@/schemas';
-import { MoreHorizontal, TrashIcon } from 'lucide-react';
+import { MoreHorizontal, Search, TrashIcon } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function RowOrderActions({ order }: { order: Order }) {
@@ -39,7 +40,21 @@ export default function RowOrderActions({ order }: { order: Order }) {
                         }}
                     >
                         <TrashIcon className='h-4 w-4 text-muted-foreground' />
-                        Delete
+                        Supprimer
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        className='flex items-center gap-2 cursor-pointer'
+                        onSelect={() => {
+                            setShowDeleteDialog((prev) => !prev);
+                        }}
+                    >
+                        <Link
+                            href={`/orders/${order.id}`}
+                            className='flex items-center gap-2 cursor-pointer'
+                        >
+                            <Search className='h-4 w-4 text-muted-foreground' />
+                            Détails
+                        </Link>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

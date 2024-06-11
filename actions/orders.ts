@@ -6,7 +6,9 @@ import {
     CreateOrderSchemaType,
     DeleteOrderSchema,
     DeleteOrderSchemaType,
+    UpdateOrderStatusSchemaType,
 } from '@/schemas';
+import { Order } from '@prisma/client';
 
 export async function CreateOrder(data: CreateOrderSchemaType) {
     const session = await getCurrentUserSession();
@@ -96,5 +98,21 @@ export async function DeleteOrder(form: DeleteOrderSchemaType) {
         where: {
             id,
         },
+    });
+}
+
+// UPDATE ORDER STATUS
+export async function updateOrderStatus({
+    orderId,
+    status,
+}: UpdateOrderStatusSchemaType): Promise<Order> {
+    const session = await getCurrentUserSession();
+    if (!session) {
+        throw new Error('Unauthorized');
+    }
+
+    return await prisma.order.update({
+        where: { id: orderId },
+        data: { status },
     });
 }
