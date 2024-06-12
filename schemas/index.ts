@@ -133,3 +133,90 @@ export const UpdateCustomerSchema = z.object({
     company: z.string().optional().nullable(),
 });
 export type UpdateCustomerSchemaType = z.infer<typeof UpdateCustomerSchema>;
+
+// ORDERS
+export const OrderStatusSchema = z.enum([
+    'PENDING',
+    'CONFIRMED',
+    'FULFILLED',
+    'INVOICED',
+    'CANCELLED',
+]);
+export type OrderStatus = z.infer<typeof OrderStatusSchema>;
+
+export const OrderLineSchema = z.object({
+    id: z.string().cuid(),
+    quantity: z.number().int(),
+    unit_price: z.number(),
+    total: z.number(),
+    discount: z.number().optional().nullable(),
+    order_id: z.string().cuid(),
+    wine_id: z.string().cuid(),
+    wine: z.object({
+        id: z.string().cuid(),
+        name: z.string(),
+        stock: z.number(),
+    }),
+});
+
+export const OrderSchema = z.object({
+    id: z.string().cuid(),
+    created_at: z.date(),
+    updated_at: z.date(),
+    status: OrderStatusSchema,
+    author_id: z.string().cuid(),
+    client_id: z.string().cuid(),
+    lines: z.array(OrderLineSchema),
+    client: z.object({
+        id: z.string().cuid(),
+        first_name: z.string(),
+        last_name: z.string(),
+        email: z.string().email(),
+        phone: z.string(),
+        adresse: z.string(),
+        company: z.string().optional().nullable(),
+    }),
+});
+
+export type Order = z.infer<typeof OrderSchema>;
+export type OrderLine = z.infer<typeof OrderLineSchema>;
+
+export const CreateOrderSchema = z.object({
+    client_id: z.string().cuid().min(1, 'Le client est requis'),
+    lines: z
+        .array(
+            z.object({
+                wine_id: z.string().cuid().min(1, 'Le vin est requis'),
+                quantity: z
+                    .number()
+                    .min(1, 'La quantité doit être au moins de 1'),
+                unit_price: z
+                    .number()
+                    .min(0, 'Le prix unitaire doit être positif'),
+                discount: z.number().min(0).optional(),
+            })
+        )
+        .min(1, 'Au moins une ligne de commande est requise'),
+});
+
+export type CreateOrderSchemaType = z.infer<typeof CreateOrderSchema>;
+
+export const DeleteOrderSchema = z.object({
+    id: z.string().cuid().min(1, { message: 'ID is required' }),
+});
+export type DeleteOrderSchemaType = z.infer<typeof DeleteOrderSchema>;
+
+export const UpdateOrderStatusSchema = z.object({
+    orderId: z.string().cuid(),
+    status: z.enum([
+        'PENDING',
+        'CONFIRMED',
+        'FULFILLED',
+        'INVOICED',
+        'CANCELLED',
+    ]),
+});
+
+export type UpdateOrderStatusSchemaType = z.infer<
+    typeof UpdateOrderStatusSchema
+>;

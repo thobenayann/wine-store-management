@@ -1,6 +1,14 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Bell, Euro, Home, UserRoundCog, Users, Wine } from 'lucide-react';
+import {
+    Bell,
+    Euro,
+    Home,
+    ShoppingCart,
+    UserRoundCog,
+    Users,
+    Wine,
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import NavLink from './nav-link';
@@ -42,14 +50,21 @@ export default function DesktopMenu() {
                             <Home className='h-4 w-4' />
                         </NavLink>
                         <NavLink
-                            href='/invoices'
-                            name='Facturation'
+                            href='/orders'
+                            name='Commandes'
                             className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
                             badge={
                                 <Badge className='ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full'>
                                     6
                                 </Badge>
                             }
+                        >
+                            <ShoppingCart className='h-4 w-4' />
+                        </NavLink>
+                        <NavLink
+                            href='/invoices'
+                            name='Facturation'
+                            className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
                         >
                             <Euro className='h-4 w-4' />
                         </NavLink>

@@ -6,9 +6,11 @@ import WinesTable from './_components/wines-table';
 export default function Wines() {
     return (
         <main>
-            <div className='container flex flex-wrap items-center justify-between gap-6 py-8'>
+            <div className='container flex max-md:flex-col items-center justify-between gap-6 py-8'>
                 <div>
-                    <p className='text-3xl font-bold'>Gestion des vins</p>
+                    <p className='text-3xl font-bold max-md:text-center'>
+                        Gestion des vins
+                    </p>
                 </div>
                 <CreateWineDialog
                     trigger={
