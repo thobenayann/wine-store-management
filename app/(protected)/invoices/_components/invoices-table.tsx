@@ -36,6 +36,7 @@ import {
 } from '@tanstack/react-table';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { useMemo, useState } from 'react';
+import RowInvoiceActions from './row-invoice-actions';
 
 const emptyData: any[] = [];
 
@@ -102,6 +103,15 @@ const columns: ColumnDef<GetInvoicesResponseType[0]>[] = [
             <DataTableColumnHeader column={column} title='Montant' />
         ),
         cell: ({ row }) => `${row.original.total.toFixed(2)} €`,
+    },
+    {
+        id: 'actions',
+        enableHiding: false,
+        cell: ({ row }) => (
+            <div className='flex items-center gap-2'>
+                <RowInvoiceActions invoice={row.original} />
+            </div>
+        ),
     },
 ];
 
