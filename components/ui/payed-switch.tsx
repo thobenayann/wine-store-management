@@ -1,20 +1,58 @@
 'use client';
 
+import { updateInvoiceStatus } from '@/actions/invoices';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { useState } from 'react';
+import { InvoiceStatus } from '@prisma/client';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 interface PayedSwitchProps {
-    status: 'Payée' | 'En cours';
+    invoiceId: string;
+    status: InvoiceStatus;
     initialIsOn?: boolean;
 }
 
-export function PayedSwitch({ status, initialIsOn = false }: PayedSwitchProps) {
+type PayedSwitchStatus = 'PAID' | 'PENDING';
+
+export function PayedSwitch({
+    invoiceId,
+    status,
+    initialIsOn = false,
+}: PayedSwitchProps) {
     const [isOn, setIsOn] = useState(initialIsOn);
+    const queryClient = useQueryClient();
+
+    useEffect(() => {
+        if (status === 'PAID' || status === 'PENDING') {
+            setIsOn(status === 'PAID');
+        }
+    }, [status]);
+
+    const mutation = useMutation({
+        mutationFn: (newStatus: PayedSwitchStatus) =>
+            updateInvoiceStatus(invoiceId, newStatus),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['invoices', invoiceId],
+            });
+            toast.success('Invoice status updated successfully');
+        },
+        onError: () => {
+            toast.error('Failed to update invoice status');
+        },
+    });
 
     const toggleSwitch = () => {
+        const newStatus: PayedSwitchStatus = isOn ? 'PENDING' : 'PAID';
         setIsOn(!isOn);
+        mutation.mutate(newStatus);
     };
+
+    if (status !== 'PAID' && status !== 'PENDING') {
+        return null; // Render nothing if status is not PAID or PENDING
+    }
 
     return (
         <div className='flex max-md:flex-col max-md:space-y-2 max-md:justify-center items-center md:space-x-2'>
