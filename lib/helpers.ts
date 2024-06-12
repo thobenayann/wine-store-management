@@ -59,3 +59,19 @@ export function translateOrderStatus(status: string): string {
 
     return statusTranslations[status] || status;
 }
+
+/**
+ * Traduit les statuts des factures en français.
+ *
+ * @param {string} status - Le statut de la facture en anglais.
+ * @returns {string} - Le statut de la facture en français.
+ */
+export function translateInvoiceStatus(status: string): string {
+    const statusTranslations: { [key: string]: string } = {
+        PENDING: 'En attente',
+        PAID: 'Payée',
+        CANCELLED: 'Annulée',
+    };
+
+    return statusTranslations[status] || status;
+}

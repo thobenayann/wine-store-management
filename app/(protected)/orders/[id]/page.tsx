@@ -356,7 +356,8 @@ function OrderDetails() {
                     <div className='flex flex-col space-y-2 mt-4'>
                         <p>
                             Cette commande a été facturée. Vous pouvez retrouver
-                            la facture correspondante portant la référence XXX.
+                            la facture correspondante à la date du{' '}
+                            {new Date().toLocaleDateString()}.
                         </p>
                         <Button
                             onClick={() => router.push('/invoices')}
