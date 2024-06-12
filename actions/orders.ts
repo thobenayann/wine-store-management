@@ -205,3 +205,25 @@ export async function updateOrderStatus({
             });
     }
 }
+
+// Get pending orders
+/**
+ * Récupère le nombre de commandes en attente pour l'utilisateur connecté.
+ *
+ * @returns {Promise<number>} - Le nombre de commandes en attente.
+ */
+export async function getPendingOrdersCount(): Promise<number> {
+    const session = await getCurrentUserSession();
+    if (!session) {
+        throw new Error('Unauthorized');
+    }
+
+    const count = await prisma.order.count({
+        where: {
+            author_id: session.user.id,
+            status: 'PENDING',
+        },
+    });
+
+    return count;
+}

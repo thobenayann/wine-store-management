@@ -36,6 +36,7 @@ import { WineRow } from '@/types/wine';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2, PlusSquare } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { ReactNode, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -45,6 +46,7 @@ interface CreateOrderDialogProps {
 }
 
 function CreateOrderDialog({ trigger }: CreateOrderDialogProps) {
+    const router = useRouter();
     const [lineError, setLineError] = useState<string | null>(null);
     const [open, setOpen] = useState(false);
     const form = useForm<CreateOrderSchemaType>({
@@ -73,9 +75,17 @@ function CreateOrderDialog({ trigger }: CreateOrderDialogProps) {
             toast.success(`La commande a été ajoutée! 🎉`, {
                 id: 'create-order',
             });
-            await queryClient.invalidateQueries({ queryKey: ['orders'] });
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: ['orders'],
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: ['pendingOrdersCount'],
+                }),
+            ]);
             setOpen((prev) => !prev);
             form.reset();
+            router.refresh();
         },
         onError: (error) => {
             toast.error(`Échec lors de l'ajout de la commande`, {

@@ -20,7 +20,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, children }) => {
     return (
         <div
             className={cn(
-                'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
+                'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold max-md:text-center',
                 colorClass
             )}
         >

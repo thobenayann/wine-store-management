@@ -32,9 +32,14 @@ function DeleteOrderDialog({ order, setOpen, open }: Props) {
                 id: 'delete-order',
             });
 
-            await queryClient.invalidateQueries({
-                queryKey: ['orders'],
-            });
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: ['orders'],
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: ['pendingOrdersCount'],
+                }),
+            ]);
         },
         onError: () => {
             toast.error(`Echec lors de la suppression de la commande`, {

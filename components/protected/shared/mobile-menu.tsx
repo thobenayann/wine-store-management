@@ -1,8 +1,10 @@
 'use client';
 
+import { getPendingOrdersCount } from '@/actions/orders';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useQuery } from '@tanstack/react-query';
 import {
     Euro,
     Home,
@@ -22,6 +24,12 @@ export default function MobileMenu() {
     const handleClose = () => {
         setIsOpen(false);
     };
+
+    const { data: pendingOrdersCount } = useQuery({
+        queryKey: ['pendingOrdersCount'],
+        queryFn: async () => await getPendingOrdersCount(),
+        initialData: 0,
+    });
 
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -67,7 +75,7 @@ export default function MobileMenu() {
                         onClick={handleClose}
                         badge={
                             <Badge className='ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full'>
-                                6
+                                {pendingOrdersCount}
                             </Badge>
                         }
                     >
