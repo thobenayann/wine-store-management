@@ -12,6 +12,7 @@ export const statusColor = {
     FULFILLED: 'bg-emerald-100 text-emerald-800',
     INVOICED: 'bg-purple-100 text-purple-800',
     CANCELLED: 'bg-red-100 text-red-800',
+    PAID: 'bg-green-100 text-green-800',
 };
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status, children }) => {
@@ -19,7 +20,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, children }) => {
     return (
         <div
             className={cn(
-                'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
+                'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold max-md:text-center',
                 colorClass
             )}
         >

@@ -1,5 +1,12 @@
+import { getPendingOrdersCount } from '@/actions/orders';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import {
     Bell,
     Euro,
@@ -13,7 +20,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import NavLink from './nav-link';
 
-export default function DesktopMenu() {
+export default async function DesktopMenu() {
+    let pendingOrdersCount = 0;
+
+    try {
+        pendingOrdersCount = await getPendingOrdersCount();
+    } catch (error) {
+        console.error('Failed to fetch pending orders count:', error);
+    }
+
     return (
         <div className='hidden border-r bg-muted/40 md:block'>
             <div className='flex h-full max-h-screen flex-col gap-2'>
@@ -54,9 +69,18 @@ export default function DesktopMenu() {
                             name='Commandes'
                             className='flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary'
                             badge={
-                                <Badge className='ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full'>
-                                    6
-                                </Badge>
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <Badge className='ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full'>
+                                                {pendingOrdersCount}
+                                            </Badge>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            Nombre de commandes en attente
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                             }
                         >
                             <ShoppingCart className='h-4 w-4' />
