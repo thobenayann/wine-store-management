@@ -2,10 +2,10 @@
 
 import { updateOrderStatus } from '@/actions/orders';
 import { GetOrderByIdResponseType } from '@/app/api/orders/order-detail/route';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import SkeletonWrapper from '@/components/ui/skeleton-wrapper';
+import StatusBadge from '@/components/ui/status-badge';
 import {
     Table,
     TableBody,
@@ -14,7 +14,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { statusColor } from '@/constants/orders';
 import { formatDate, translateOrderStatus } from '@/lib/helpers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, X } from 'lucide-react';
@@ -391,12 +390,9 @@ function OrderDetails() {
                             <div className='flex space-x-2'>
                                 <p>Status :</p>
                                 {order.status ? (
-                                    <Badge
-                                        variant='outline'
-                                        className={statusColor[order.status]}
-                                    >
+                                    <StatusBadge status={order.status}>
                                         {translateOrderStatus(order.status)}
-                                    </Badge>
+                                    </StatusBadge>
                                 ) : null}
                             </div>
                         </div>

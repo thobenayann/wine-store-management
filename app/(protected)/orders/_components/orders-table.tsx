@@ -2,9 +2,9 @@
 
 import { DataTableColumnHeader } from '@/components/data-table/ColumnHeader';
 import { DataTableViewOptions } from '@/components/data-table/ColumnToggle';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import SkeletonWrapper from '@/components/ui/skeleton-wrapper';
+import StatusBadge from '@/components/ui/status-badge';
 import {
     Table,
     TableBody,
@@ -13,7 +13,6 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { statusColor } from '@/constants/orders';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { translateOrderStatus } from '@/lib/helpers';
 import { Order } from '@/schemas';
@@ -32,8 +31,6 @@ import { Redo2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import RowOrderActions from './row-order-actions';
-
-const emptyData: any[] = [];
 
 const columns: ColumnDef<Order>[] = [
     {
@@ -60,9 +57,9 @@ const columns: ColumnDef<Order>[] = [
         cell: ({ row }) => {
             const status = row.original.status;
             return (
-                <Badge variant='outline' className={statusColor[status]}>
+                <StatusBadge status={status}>
                     {translateOrderStatus(status)}
-                </Badge>
+                </StatusBadge>
             );
         },
     },
@@ -96,13 +93,13 @@ const OrderTable = () => {
 
     const isDesktop = useMediaQuery('(min-width: 768px)');
 
-    const ordersQuery = useQuery({
+    const ordersQuery = useQuery<Order[]>({
         queryKey: ['orders'],
         queryFn: () => fetch('/api/orders').then((res) => res.json()),
     });
 
-    const table = useReactTable({
-        data: ordersQuery.data || emptyData,
+    const table = useReactTable<Order>({
+        data: ordersQuery.data || [],
         columns,
         getCoreRowModel: getCoreRowModel(),
         state: {
