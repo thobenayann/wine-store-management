@@ -1,7 +1,21 @@
-export default function Dashboard() {
+import { getCurrentUserSession } from '@/lib/getSession';
+import SalesChart from './_components/sales-chart';
+
+export default async function Dashboard() {
+    const session = await getCurrentUserSession();
+
     return (
-        <div className='md:grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]'>
-            <p>Dashboard</p>
-        </div>
+        <main>
+            <div className='container flex max-md:flex-col items-center justify-between gap-6 py-8 border-b bg-card'>
+                <div>
+                    <p className='text-3xl font-bold max-md:text-center'>
+                        {`Hello ${session?.user?.firstName ?? ''} 👋`}
+                    </p>
+                </div>
+            </div>
+            <div className='md:container'>
+                <SalesChart />
+            </div>
+        </main>
     );
 }
