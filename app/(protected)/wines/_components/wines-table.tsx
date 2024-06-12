@@ -15,6 +15,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { WineType, wineTypeLabels } from '@/constants/wines';
+import { WineRow } from '@/types/wine';
 import { Wine } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -33,8 +34,6 @@ import { useMemo, useState } from 'react';
 import RowWineActions from './row-wine-actions';
 
 const emptyData: any[] = [];
-
-type WineRow = GetWinesResponseType[0];
 
 const wineColors: { [key in WineType]: string } = {
     RED: '#961623',

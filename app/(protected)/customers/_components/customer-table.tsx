@@ -28,17 +28,7 @@ import {
 import { download, generateCsv } from 'export-to-csv';
 import { useMemo, useState } from 'react';
 import RowCustomerActions from './row-customer-actions';
-
-type CustomerRow = {
-    id: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone: string;
-    adresse: string;
-    company: string | null;
-    customer_of: string;
-};
+import { CustomerRow } from '@/types/customer';
 
 const columns: ColumnDef<CustomerRow>[] = [
     {

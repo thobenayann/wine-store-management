@@ -8,6 +8,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     if (req.method !== 'GET') {
         return Response.json({ status: 405 });
     }
+
     try {
         const wines = await getWines();
         return Response.json(wines);
