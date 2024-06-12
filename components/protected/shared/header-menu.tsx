@@ -46,7 +46,14 @@ async function HeaderMenu() {
                     >
                         <DropdownMenuItem>Profile</DropdownMenuItem>
                     </Link>
-                    <DropdownMenuItem>Support</DropdownMenuItem>
+                    <DropdownMenuItem>
+                        <Link
+                            href='/terms-and-conditions'
+                            className='transition-colors hover:bg-muted/50'
+                        >
+                            Conditions d&apos;utilisation
+                        </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
                         <LogoutBtn />
