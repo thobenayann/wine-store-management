@@ -1,5 +1,7 @@
 import { getCurrentUserSession } from '@/lib/getSession';
+import LastOrdersTable from './_components/last-orders-table';
 import SalesChart from './_components/sales-chart';
+import WineStatsPieChart from './_components/wines-stats-chart';
 
 export default async function Dashboard() {
     const session = await getCurrentUserSession();
@@ -13,8 +15,12 @@ export default async function Dashboard() {
                     </p>
                 </div>
             </div>
-            <div className='md:container'>
+            <div className='md:container max-md:space-y-6 pb-12'>
                 <SalesChart />
+                <div className='flex max-md:flex-col max-md:space-y-6 max-md:border-t-2 max-md:border-dashed'>
+                    <WineStatsPieChart />
+                    <LastOrdersTable />
+                </div>
             </div>
         </main>
     );

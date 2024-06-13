@@ -85,7 +85,12 @@ function SalesChart() {
 
     return (
         <div className='container py-2'>
-            <h2 className='mt-4 md:mt-12 text-3xl font-bold'>Ventes</h2>
+            <h2 className='mt-4 md:mt-12 text-2xl max-md:text-center md:text-3xl font-bold'>
+                Ventes
+            </h2>
+            <p className='text-muted-foreground max-md:text-center'>
+                Données provenant des factures
+            </p>
             <Card className='col-span-12 mt-2 w-full'>
                 <CardHeader className='gap-2'>
                     <CardTitle className='grid grid-flow-row justify-between gap-2 md:grid-flow-col'>
@@ -185,11 +190,11 @@ function SalesChart() {
                             </ResponsiveContainer>
                         )}
                         {!dataAvailable && (
-                            <Card className='flex h-[300px] flex-col items-center justify-center bg-background max-md:px-4'>
-                                No data for the selected period
+                            <Card className='flex max-md:text-center max-md:py-4 md:h-[300px] flex-col items-center justify-center bg-background max-md:px-4'>
+                                Pas de données sur les ventes de la période
+                                choisie
                                 <p className='text-sm text-muted-foreground'>
-                                    Try selecting a different period or adding
-                                    new transactions
+                                    Essayez de sélectionner une autre période
                                 </p>
                             </Card>
                         )}

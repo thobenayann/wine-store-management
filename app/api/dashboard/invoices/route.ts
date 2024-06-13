@@ -22,10 +22,6 @@ export async function GET(req: NextRequest) {
     const year = searchParams.get('year');
     const month = searchParams.get('month');
 
-    console.log('timeframe', timeframe);
-    console.log('year', year);
-    console.log('month', month);
-
     const queryParams = getInvoicesSchema.safeParse({
         timeframe,
         year,
