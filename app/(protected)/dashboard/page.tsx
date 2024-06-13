@@ -1,5 +1,6 @@
 import { getCurrentUserSession } from '@/lib/getSession';
 import SalesChart from './_components/sales-chart';
+import WineStatsPieChart from './_components/wines-stats-chart';
 
 export default async function Dashboard() {
     const session = await getCurrentUserSession();
@@ -15,6 +16,7 @@ export default async function Dashboard() {
             </div>
             <div className='md:container'>
                 <SalesChart />
+                <WineStatsPieChart />
             </div>
         </main>
     );
