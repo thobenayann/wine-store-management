@@ -72,7 +72,7 @@ function WineStatsPieChart() {
             <text
                 x={x}
                 y={y}
-                fill='white'
+                fill='var(--foreground)'
                 textAnchor={x > cx ? 'start' : 'end'}
                 dominantBaseline='central'
             >
@@ -91,14 +91,14 @@ function WineStatsPieChart() {
         : [];
 
     return (
-        <div className='container py-2'>
+        <div className='container py-2 w-full md:w-1/2'>
             <h2 className='mt-4 md:mt-12 text-2xl max-md:text-center md:text-3xl font-bold'>
                 Ventes par type de vin
             </h2>
             <p className='text-muted-foreground max-md:text-center'>
                 Quantité facturée et payée uniquement
             </p>
-            <Card className='col-span-12 mt-2 w-full md:w-1/2'>
+            <Card className='col-span-12 mt-2'>
                 <CardHeader className='gap-2'>
                     <CardTitle className='grid grid-flow-row justify-between gap-2 md:grid-flow-col'>
                         <HistoryPeriodSelector
@@ -159,7 +159,7 @@ function WineStatsPieChart() {
                                         fill='url(#paidBar)'
                                         label={renderCustomizedLabel}
                                         labelLine={false}
-                                        stroke='#000'
+                                        stroke='var(--border)'
                                     >
                                         {wineSalesData.map((entry, index) => (
                                             <Cell
@@ -172,7 +172,7 @@ function WineStatsPieChart() {
                                     <Legend
                                         layout='vertical'
                                         verticalAlign={
-                                            isDesktop ? 'middle' : 'top'
+                                            isDesktop ? 'middle' : 'bottom'
                                         }
                                         align={isDesktop ? 'left' : 'center'}
                                         formatter={(value, entry, index) => (

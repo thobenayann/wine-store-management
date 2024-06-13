@@ -191,10 +191,10 @@ function SalesChart() {
                         )}
                         {!dataAvailable && (
                             <Card className='flex max-md:text-center max-md:py-4 md:h-[300px] flex-col items-center justify-center bg-background max-md:px-4'>
-                                No data for the selected period
+                                Pas de données sur les ventes de la période
+                                choisie
                                 <p className='text-sm text-muted-foreground'>
-                                    Try selecting a different period or adding
-                                    new transactions
+                                    Essayez de sélectionner une autre période
                                 </p>
                             </Card>
                         )}
