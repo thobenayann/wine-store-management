@@ -37,6 +37,9 @@ export function PayedSwitch({
             queryClient.invalidateQueries({
                 queryKey: ['invoices', invoiceId],
             });
+            queryClient.invalidateQueries({
+                queryKey: ['wines-stats', 'year', 'month'],
+            });
             toast.success('Invoice status updated successfully');
         },
         onError: () => {
