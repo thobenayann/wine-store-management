@@ -46,6 +46,14 @@ async function getInvoiceById(invoiceId: string) {
     return await prisma.invoice.findFirst({
         where: { author_id: session.user.id, id: invoiceId },
         include: {
+            author: {
+                select: {
+                    id: true,
+                    first_name: true,
+                    last_name: true,
+                    email: true,
+                },
+            },
             client: true,
             lines: {
                 include: {
