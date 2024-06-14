@@ -33,15 +33,15 @@ export default async function LastOrdersTable() {
             <Card className='col-span-12 mt-2'>
                 <CardHeader>
                     <CardTitle className='text-sm text-muted-foreground'>
-                        <Button
-                            variant={'outline'}
-                            size={'sm'}
-                            className='ml-auto h-8 flex'
-                        >
-                            <Link href='/orders'>
+                        <Link href='/orders'>
+                            <Button
+                                variant={'outline'}
+                                size={'sm'}
+                                className='ml-auto h-8 flex'
+                            >
                                 <ShoppingCart className='h-4 w-4' />
-                            </Link>
-                        </Button>
+                            </Button>
+                        </Link>
                     </CardTitle>
                 </CardHeader>
                 <SkeletonWrapper isLoading={isLoading}>

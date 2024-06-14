@@ -14,8 +14,11 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { formatDate, translateInvoiceStatus } from '@/lib/helpers';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
+import InvoicePDF from '../_components/invoice-pdf';
 
 function InvoiceDetails() {
     const router = useRouter();
@@ -77,32 +80,66 @@ function InvoiceDetails() {
         <SkeletonWrapper isLoading={isLoading}>
             <Card className='p-4'>
                 <CardContent className='max-md:space-y-10'>
-                    <h2 className='text-2xl font-bold max-md:text-center'>
-                        Détail de la facture du {invoiceDate}
-                    </h2>
-                    {invoice?.client && (
-                        <div className='flex flex-col space-y-2 mt-4'>
-                            <div className='flex space-x-4'>
-                                <span className='font-bold'>Client :</span>
-                                <p>
-                                    {invoice.client.first_name}{' '}
-                                    {invoice.client.last_name}
-                                </p>
-                            </div>
-                            <div className='flex space-x-2'>
-                                <p>Échéance :</p>
-                                <p>{dueDate}</p>
-                            </div>
-                            <div className='flex space-x-2'>
-                                <p>Status :</p>
-                                {invoice.status ? (
-                                    <StatusBadge status={invoice.status}>
-                                        {translateInvoiceStatus(invoice.status)}
-                                    </StatusBadge>
-                                ) : null}
-                            </div>
+                    <div className='flex md:justify-between max-md:flex-col max-md:items-center max-md:space-y-4'>
+                        <div>
+                            <h2 className='text-2xl font-bold max-md:text-center'>
+                                Détail de la facture du {invoiceDate}
+                            </h2>
+                            {invoice?.client && (
+                                <div className='flex flex-col space-y-2 mt-4'>
+                                    <div className='flex space-x-4'>
+                                        <span className='font-bold'>
+                                            Client :
+                                        </span>
+                                        <p>
+                                            {invoice.client.first_name}{' '}
+                                            {invoice.client.last_name}
+                                        </p>
+                                    </div>
+                                    <div className='flex space-x-2'>
+                                        <p>Échéance :</p>
+                                        <p>{dueDate}</p>
+                                    </div>
+                                    <div className='flex space-x-2'>
+                                        <p>Status :</p>
+                                        {invoice.status ? (
+                                            <StatusBadge
+                                                status={invoice.status}
+                                            >
+                                                {translateInvoiceStatus(
+                                                    invoice.status
+                                                )}
+                                            </StatusBadge>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    )}
+                        <div>
+                            <PDFDownloadLink
+                                document={<InvoicePDF invoice={invoice} />}
+                                fileName={`facture_${invoice.id}.pdf`}
+                                className='btn btn-primary'
+                            >
+                                {({ loading }) =>
+                                    loading ? (
+                                        'Création du PDF...'
+                                    ) : (
+                                        <div className='flex flex-col items-center border-2 border-dashed rounded-2xl p-4 space-y-1 dark:hover:bg-gray-900 hover:bg-gray-200'>
+                                            <p>Télécharger le PDF</p>
+                                            <Image
+                                                src='/gif/system-upload-file.gif'
+                                                alt='wine gif'
+                                                width={50}
+                                                height={50}
+                                                unoptimized
+                                            />
+                                        </div>
+                                    )
+                                }
+                            </PDFDownloadLink>
+                        </div>
+                    </div>
                     <Table className='mt-4'>{renderInvoiceDetails()}</Table>
                     <div className='flex flex-col space-y-2 mt-4'>
                         <Button
