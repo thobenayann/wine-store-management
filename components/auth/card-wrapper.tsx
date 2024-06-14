@@ -35,7 +35,7 @@ function CardWrapper({
                     <Social />
                 </CardFooter>
             ) : null}
-            <CardFooter>
+            <CardFooter className='border-t-2 border-dashed'>
                 <BackButton label={backButtonLabel} href={backButtonHref} />
             </CardFooter>
         </Card>
