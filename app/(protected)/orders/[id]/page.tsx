@@ -15,6 +15,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { formatDate, translateOrderStatus } from '@/lib/helpers';
+import { OrderStatus } from '@prisma/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, X } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -315,8 +316,11 @@ function OrderDetails() {
                     <div className='flex flex-col space-y-2 mt-4'>
                         <p>
                             Le stock de vin permet d&apos;honorer la commande,
-                            vous pouvez la basculer en statut honorée avant de
-                            pouvoir la facturer.
+                            vous pouvez la basculer en statut{' '}
+                            <StatusBadge status={OrderStatus.FULFILLED}>
+                                {translateOrderStatus(OrderStatus.FULFILLED)}
+                            </StatusBadge>{' '}
+                            avant de pouvoir la facturer.
                         </p>
                         <Button
                             onClick={() => handleUpdateStatus('FULFILLED')}
@@ -380,7 +384,7 @@ function OrderDetails() {
                         Détail de la commande du {orderDate.toString()}
                     </h2>
                     {order?.client && (
-                        <div className='mt-4'>
+                        <div className='mt-4 md:space-y-2'>
                             <div className='flex space-x-4'>
                                 <span className='font-bold'>Client :</span>
                                 <p>

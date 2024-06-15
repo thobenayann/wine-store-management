@@ -27,7 +27,7 @@ export default async function LastOrdersTable() {
             </h2>
             <div className='flex items-center max-md:flex-col max-md:text-center gap-x-2'>
                 <p className='text-muted-foreground'>
-                    Vous pouvez retrouver toutes vos 5 dernières commandes ici
+                    Vous pouvez retrouver vos 5 dernières commandes ici
                 </p>
             </div>
             <Card className='col-span-12 mt-2'>

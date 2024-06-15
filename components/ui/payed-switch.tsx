@@ -40,10 +40,14 @@ export function PayedSwitch({
             queryClient.invalidateQueries({
                 queryKey: ['wines-stats', 'year', 'month'],
             });
-            toast.success('Invoice status updated successfully');
+            toast.success(
+                `Le statut de la facture a été mis à jour avec succès`
+            );
         },
         onError: () => {
-            toast.error('Failed to update invoice status');
+            toast.error(
+                'Erreur lors de la mise à jour du statut de la facture'
+            );
         },
     });
 
