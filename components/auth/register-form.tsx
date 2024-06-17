@@ -158,7 +158,7 @@ export default function RegisterForm() {
                         Créer un compte
                     </Button>
                     <div className='flex justify-center'>
-                        {isPending && <BeatLoader />}
+                        {isPending && <BeatLoader color='white' />}
                     </div>
                     <FormError message={error} />
                     <FormSucess message={success} />

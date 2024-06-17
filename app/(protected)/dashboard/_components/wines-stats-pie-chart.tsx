@@ -81,8 +81,6 @@ function WineStatsPieChart() {
         );
     };
 
-    if (!wineSalesData) return null;
-
     const wineSalesDataWithColors: WineSalesDataWithColors[] = wineSalesData
         ? wineSalesData.map((entry, index) => ({
               ...entry,
