@@ -58,12 +58,17 @@ export function PayedSwitch({
     };
 
     if (status !== 'PAID' && status !== 'PENDING') {
-        return null; // Render nothing if status is not PAID or PENDING
+        return null;
     }
 
     return (
         <div className='flex max-md:flex-col max-md:space-y-2 max-md:justify-center items-center md:space-x-2'>
-            <Switch id='invoice-status' checked={isOn} onClick={toggleSwitch} />
+            <Switch
+                id='invoice-status'
+                checked={isOn}
+                onClick={toggleSwitch}
+                className='data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-700'
+            />
             <Label
                 className='max-md:text-center text-xs md:text-sm'
                 htmlFor='invoice-status'
