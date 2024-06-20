@@ -24,6 +24,16 @@ export async function CreateOrder(data: CreateOrderSchemaType) {
         throw new Error('Client not found');
     }
 
+    // Fetch user settings to get the VAT rate
+    const userSettings = await prisma.userSettings.findUnique({
+        where: { user_id: session.user.id },
+    });
+    if (!userSettings) {
+        throw new Error('User settings not found');
+    }
+
+    const vatRate = userSettings.vat_rate;
+
     // Prepare order lines
     const orderLines = [];
     for (const line of data.lines) {
@@ -52,6 +62,7 @@ export async function CreateOrder(data: CreateOrderSchemaType) {
             client_id: data.client_id,
             author_id: session.user.id,
             status: 'PENDING',
+            vat_applied: vatRate,
             lines: {
                 create: orderLines,
             },

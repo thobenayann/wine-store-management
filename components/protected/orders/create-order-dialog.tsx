@@ -366,7 +366,7 @@ function CreateOrderDialog({ trigger }: CreateOrderDialogProps) {
                                                                 }
                                                                 min='0'
                                                                 step='0.01'
-                                                                placeholder='Prix unitaire'
+                                                                placeholder='Prix unitaire HT'
                                                                 disabled={
                                                                     isPending
                                                                 }

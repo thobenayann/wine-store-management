@@ -71,12 +71,13 @@ model OrderLine {
 }
 
 model Order {
-  id         String      @id @default(cuid())
-  created_at DateTime    @default(now())
-  updated_at DateTime    @updatedAt
-  status     OrderStatus
-  author_id  String
-  client_id  String
+  id          String      @id @default(cuid())
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  status      OrderStatus
+  author_id   String
+  client_id   String
+  vat_applied Float?
 
   author     User        @relation(fields: [author_id], references: [id], onDelete: Cascade)
   client     Customer    @relation(fields: [client_id], references: [id], onDelete: Cascade)
@@ -184,7 +185,7 @@ model UserSettings {
   user_id         String   @unique
   vat_rate        Float    @default(20.00)
   payment_terms   Int      @default(30)
-  currency        String   @default("€")
+  currency        String   @default("EUR")
 
   user            User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 

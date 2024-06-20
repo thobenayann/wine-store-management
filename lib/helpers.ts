@@ -75,3 +75,25 @@ export function translateInvoiceStatus(status: string): string {
 
     return statusTranslations[status] || status;
 }
+
+/**
+ * Utilitaire pour formater un montant en devise.
+ *
+ * @param {string} currency - La devise à utiliser pour le formatage (par défaut : 'EUR').
+ * @param {number} value - Le montant à formater.
+ * @returns {string} - Le montant formaté en devise.
+ * @example
+ * // Affiche "€123.45" dans la console
+ * console.log(formatCurrency(123.45));
+ */
+export const formatCurrency = (
+    value: number,
+    currency: string = 'EUR'
+): string => {
+    return new Intl.NumberFormat('fr-FR', {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(value);
+};

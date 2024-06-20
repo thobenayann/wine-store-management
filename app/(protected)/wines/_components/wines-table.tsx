@@ -104,7 +104,7 @@ const columns: ColumnDef<WineRow>[] = [
     {
         accessorKey: 'price',
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title='Prix' />
+            <DataTableColumnHeader column={column} title='Prix HT' />
         ),
         cell: ({ row }) => <div>{row.original.price.toFixed(2)} €</div>,
     },

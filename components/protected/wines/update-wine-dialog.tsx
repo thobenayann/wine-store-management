@@ -287,7 +287,7 @@ function UpdateWineDialog({ wine, setOpen, open }: UpdateWineDialogProps) {
                                 name='price'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Prix (€)</FormLabel>
+                                        <FormLabel>Prix HT(€)</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type='number'

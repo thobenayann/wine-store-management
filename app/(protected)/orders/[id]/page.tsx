@@ -14,7 +14,11 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { formatDate, translateOrderStatus } from '@/lib/helpers';
+import {
+    formatCurrency,
+    formatDate,
+    translateOrderStatus,
+} from '@/lib/helpers';
 import { OrderStatus } from '@prisma/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, X } from 'lucide-react';
@@ -87,10 +91,22 @@ function OrderDetails() {
     const orderDate = order.created_at
         ? formatDate(new Date(order.created_at), 'fr-FR')
         : '';
+
     const totalInvoiceAmount = order.lines.reduce(
         (total, line) => total + line.total,
         0
     );
+
+    const totalHT = order.lines.reduce(
+        (total, line) =>
+            total +
+            line.unit_price * line.quantity * (1 - (line.discount || 0) / 100),
+        0
+    );
+
+    const vatAmount =
+        totalHT * (order.vat_applied ? order.vat_applied / 100 : 0);
+    const totalTTC = totalHT + vatAmount;
 
     const renderOrderDetails = () => {
         switch (order.status) {
@@ -101,9 +117,10 @@ function OrderDetails() {
                             <TableRow>
                                 <TableHead>Vin</TableHead>
                                 <TableHead>Quantité</TableHead>
-                                <TableHead>Prix unitaire</TableHead>
+                                <TableHead>Prix unitaire HT</TableHead>
                                 <TableHead>Remise</TableHead>
-                                <TableHead>Total ligne</TableHead>
+                                <TableHead>PU HT après remise</TableHead>
+                                <TableHead>Total ligne HT</TableHead>
                                 <TableHead>Stock courrant</TableHead>
                                 <TableHead>Disponibilité</TableHead>
                             </TableRow>
@@ -113,11 +130,25 @@ function OrderDetails() {
                                 <TableRow key={line.id}>
                                     <TableCell>{line.wine.name}</TableCell>
                                     <TableCell>{line.quantity}</TableCell>
-                                    <TableCell>{line.unit_price} €</TableCell>
+                                    <TableCell>
+                                        {formatCurrency(line.unit_price)}
+                                    </TableCell>
                                     <TableCell>
                                         {line.discount || 0} %
                                     </TableCell>
-                                    <TableCell>{line.total} €</TableCell>
+                                    <TableCell>
+                                        {formatCurrency(
+                                            line.unit_price *
+                                                (1 - (line.discount || 0) / 100)
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        {formatCurrency(
+                                            line.unit_price *
+                                                line.quantity *
+                                                (1 - (line.discount || 0) / 100)
+                                        )}
+                                    </TableCell>
                                     <TableCell>{line.wine.stock}</TableCell>
                                     <TableCell>
                                         {line.wine.stock >= line.quantity ? (
@@ -129,12 +160,27 @@ function OrderDetails() {
                                 </TableRow>
                             ))}
                             <TableRow>
-                                <TableCell
-                                    colSpan={7}
-                                    className='text-right font-bold'
-                                >
-                                    Total à facturer :{' '}
-                                    {totalInvoiceAmount.toFixed(2)} €
+                                <TableCell colSpan={8} className='text-right'>
+                                    Total HT à facturer :{' '}
+                                    <span className='font-bold'>
+                                        {formatCurrency(totalHT)}
+                                    </span>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell colSpan={8} className='text-right'>
+                                    TVA ({order.vat_applied}%):{' '}
+                                    <span className='font-bold'>
+                                        {formatCurrency(vatAmount)}
+                                    </span>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell colSpan={8} className='text-right'>
+                                    Total TTC :{' '}
+                                    <span className='font-bold'>
+                                        {formatCurrency(totalTTC)}
+                                    </span>
                                 </TableCell>
                             </TableRow>
                         </TableBody>
