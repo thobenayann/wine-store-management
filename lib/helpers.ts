@@ -95,5 +95,7 @@ export const formatCurrency = (
         currency: currency,
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-    }).format(value);
+    })
+        .format(value)
+        .replace(/\s/g, '\u00A0');
 };

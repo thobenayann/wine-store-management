@@ -176,17 +176,29 @@ export async function updateOrderStatus({
                 throw new Error('Author ID is required');
             }
 
+            // Fetch user settings to get the VAT rate
+            const userSettings = await prisma.userSettings.findUnique({
+                where: { user_id: session.user.id },
+            });
+            if (!userSettings) {
+                throw new Error('User settings not found');
+            }
+
             return await prisma.$transaction(async (prisma) => {
                 // Create an invoice
                 const invoice = await prisma.invoice.create({
                     data: {
                         reference: `INV-${order.id}`,
                         due_date: new Date(
-                            new Date().setDate(new Date().getDate() + 30)
-                        ), // Due date set to 30 days from now
+                            new Date().setDate(
+                                new Date().getDate() +
+                                    userSettings.payment_terms
+                            )
+                        ),
                         status: 'PENDING',
                         author_id: authorId,
                         client_id: order.client_id,
+                        vat_applied: userSettings.vat_rate,
                         lines: {
                             create: order.lines.map((line) => ({
                                 wine_id: line.wine_id,

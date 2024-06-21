@@ -21,6 +21,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatCurrency } from '@/lib/helpers';
 import { Customer } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -100,9 +101,9 @@ const columns: ColumnDef<GetInvoicesResponseType[0]>[] = [
     {
         accessorKey: 'total',
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title='Montant' />
+            <DataTableColumnHeader column={column} title='Montant HT' />
         ),
-        cell: ({ row }) => `${row.original.total.toFixed(2)} €`,
+        cell: ({ row }) => `${formatCurrency(row.original.total)}`,
     },
     {
         id: 'actions',

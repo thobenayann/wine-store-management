@@ -51,9 +51,14 @@ function OrderDetails() {
                 }
             );
             // Invalidate and refetch
-            await queryClient.invalidateQueries({
-                queryKey: ['order-by-id', orderId],
-            });
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: ['order-by-id', orderId],
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: ['pendingOrdersCount'],
+                }),
+            ]);
             // Invalidate the wines related to the order
             if (order?.lines) {
                 const wineIds = order.lines.map((line) => line.wine_id);
