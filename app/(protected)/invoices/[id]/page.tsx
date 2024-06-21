@@ -13,7 +13,11 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { formatDate, translateInvoiceStatus } from '@/lib/helpers';
+import {
+    formatCurrency,
+    formatDate,
+    translateInvoiceStatus,
+} from '@/lib/helpers';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -41,10 +45,17 @@ function InvoiceDetails() {
     const dueDate = invoice.due_date
         ? formatDate(new Date(invoice.due_date), 'fr-FR')
         : '';
-    const totalInvoiceAmount = invoice.lines.reduce(
-        (total, line) => total + line.total,
+
+    const totalHT = invoice.lines.reduce(
+        (total, line) =>
+            total +
+            line.unit_price * line.quantity * (1 - (line.discount || 0) / 100),
         0
     );
+
+    const vatAmount =
+        totalHT * (invoice.vat_applied ? invoice.vat_applied / 100 : 0);
+    const totalTTC = totalHT + vatAmount;
 
     const renderInvoiceDetails = () => (
         <>
@@ -52,9 +63,10 @@ function InvoiceDetails() {
                 <TableRow>
                     <TableHead>Vin</TableHead>
                     <TableHead>Quantité</TableHead>
-                    <TableHead>Prix unitaire</TableHead>
+                    <TableHead>Prix unitaire HT</TableHead>
                     <TableHead>Remise</TableHead>
-                    <TableHead>Total ligne</TableHead>
+                    <TableHead>Prix unitaire après remise</TableHead>
+                    <TableHead>Total ligne HT</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -62,14 +74,45 @@ function InvoiceDetails() {
                     <TableRow key={line.id}>
                         <TableCell>{line.wine.name}</TableCell>
                         <TableCell>{line.quantity}</TableCell>
-                        <TableCell>{line.unit_price} €</TableCell>
+                        <TableCell>{formatCurrency(line.unit_price)}</TableCell>
                         <TableCell>{line.discount || 0} %</TableCell>
-                        <TableCell>{line.total} €</TableCell>
+                        <TableCell>
+                            {formatCurrency(
+                                line.unit_price *
+                                    (1 - (line.discount || 0) / 100)
+                            )}
+                        </TableCell>
+                        <TableCell>
+                            {formatCurrency(
+                                line.unit_price *
+                                    line.quantity *
+                                    (1 - (line.discount || 0) / 100)
+                            )}
+                        </TableCell>
                     </TableRow>
                 ))}
                 <TableRow>
-                    <TableCell colSpan={5} className='text-right font-bold'>
-                        Total : {totalInvoiceAmount.toFixed(2)} €
+                    <TableCell colSpan={6} className='text-right'>
+                        Total HT facturé :{' '}
+                        <span className='font-bold'>
+                            {formatCurrency(totalHT)}
+                        </span>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell colSpan={6} className='text-right'>
+                        TVA ({invoice.vat_applied}%) :{' '}
+                        <span className='font-bold'>
+                            {formatCurrency(vatAmount)}
+                        </span>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell colSpan={6} className='text-right'>
+                        Total TTC :{' '}
+                        <span className='font-bold'>
+                            {formatCurrency(totalTTC)}
+                        </span>
                     </TableCell>
                 </TableRow>
             </TableBody>

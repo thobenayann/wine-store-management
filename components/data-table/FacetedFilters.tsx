@@ -25,7 +25,7 @@ interface DataTableFacetedFilterProps<TData, TValue> {
     column?: Column<TData, TValue>;
     title?: string;
     options: {
-        label: string;
+        label: string | JSX.Element;
         value: string;
         icon?: React.ComponentType<{ className?: string }>;
     }[];
@@ -80,7 +80,12 @@ export function DataTableFacetedFilter<TData, TValue>({
                                                 key={option.value}
                                                 className='rounded-sm px-1 font-normal'
                                             >
-                                                {option.label}
+                                                {typeof option.label ===
+                                                'string'
+                                                    ? option.label
+                                                    : React.cloneElement(
+                                                          option.label
+                                                      )}
                                             </Badge>
                                         ))
                                 )}

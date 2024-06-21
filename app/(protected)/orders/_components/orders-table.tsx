@@ -66,7 +66,7 @@ const columns: ColumnDef<Order>[] = [
     {
         accessorKey: 'total',
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title='Total' />
+            <DataTableColumnHeader column={column} title='Total HT' />
         ),
         cell: ({ row }) => {
             const total = row.original.lines.reduce(

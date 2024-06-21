@@ -104,7 +104,7 @@ const columns: ColumnDef<WineRow>[] = [
     {
         accessorKey: 'price',
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title='Prix' />
+            <DataTableColumnHeader column={column} title='Prix HT' />
         ),
         cell: ({ row }) => <div>{row.original.price.toFixed(2)} €</div>,
     },
@@ -169,15 +169,26 @@ function WineTable() {
     };
 
     const wineTypesOptions = useMemo(() => {
-        const wineTypesMap = new Map();
-        winesQuery.data?.forEach((wine: Wine) => {
+        const wineTypesMap = new Map<
+            WineType,
+            { value: WineType; label: JSX.Element }
+        >();
+        winesQuery.data?.forEach((wine) => {
             wineTypesMap.set(wine.type, {
                 value: wine.type,
-                label: wineTypeLabels[wine.type],
+                label: (
+                    <div className='flex items-center'>
+                        {getWineTypeSVG(wine.type)} {wineTypeLabels[wine.type]}
+                    </div>
+                ),
             });
         });
         const uniqueWineTypes = Array.from(wineTypesMap.values());
-        return uniqueWineTypes.sort((a, b) => a.label.localeCompare(b.label));
+        return uniqueWineTypes.sort((a, b) => {
+            const labelA = (a.label as JSX.Element).props.children[1];
+            const labelB = (b.label as JSX.Element).props.children[1];
+            return labelA.localeCompare(labelB);
+        });
     }, [winesQuery.data]);
 
     const wineRegionsOptions = useMemo(() => {

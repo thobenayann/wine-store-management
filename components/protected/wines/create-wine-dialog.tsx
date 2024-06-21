@@ -291,7 +291,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                 name='price'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Prix (€)</FormLabel>
+                                        <FormLabel>Prix HT(€)</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type='number'
@@ -310,7 +310,7 @@ function CreateWineDialog({ trigger }: CreateWineDialogProps) {
                                             />
                                         </FormControl>
                                         <FormDescription className='max-sm:text-xs'>
-                                            Le prix du vin en euros
+                                            Le prix hors taxe du vin
                                         </FormDescription>
                                     </FormItem>
                                 )}

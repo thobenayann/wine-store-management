@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import SkeletonWrapper from '@/components/ui/skeleton-wrapper';
 import StatusBadge from '@/components/ui/status-badge';
-import { translateOrderStatus } from '@/lib/helpers';
+import { formatCurrency, translateOrderStatus } from '@/lib/helpers';
 import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 
@@ -72,7 +72,7 @@ export default async function LastOrdersTable() {
                                         </p>
                                     </div>
                                     <div className='md:ml-auto font-medium max-md:text-sm'>
-                                        {order.totalAmount.toFixed(2)}€
+                                        {formatCurrency(order.totalAmount)} HT
                                     </div>
                                 </div>
                             ))
