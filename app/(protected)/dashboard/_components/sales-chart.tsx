@@ -89,7 +89,7 @@ function SalesChart() {
                 Ventes
             </h2>
             <p className='text-muted-foreground max-md:text-center'>
-                Données provenant des factures
+                Données provenant des factures (montants hors taxes)
             </p>
             <Card className='col-span-12 mt-2 w-full'>
                 <CardHeader className='gap-2'>
