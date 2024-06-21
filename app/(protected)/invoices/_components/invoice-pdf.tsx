@@ -283,14 +283,14 @@ const InvoicePDF: React.FC<Props> = ({ invoice }) => {
                     <Text>Merci pour votre achat !</Text>
                     <Text>Contactez-nous pour toute question.</Text>
                 </View>
-                <View style={styles.legalInfo}>
+                {/* <View style={styles.legalInfo}>
                     <Text>Numéro de TVA INTRA : FRXX 123456789</Text>
                     <Text>Numéro de SIRET : 123 456 789 00000</Text>
                     <Text>
                         Adresse de l&apos;entreprise : 123 Rue de
                         l&apos;Exemple, 75000 Paris, France
                     </Text>
-                </View>
+                </View> */}
             </Page>
         </Document>
     );

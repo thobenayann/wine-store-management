@@ -1,3 +1,5 @@
+import { Currencies } from '@/constants/currencies';
+
 /**
  * Convertit un objet Date en un objet Date UTC.
  *
@@ -74,6 +76,35 @@ export function translateInvoiceStatus(status: string): string {
     };
 
     return statusTranslations[status] || status;
+}
+
+/**
+ * Crée un formateur de nombres pour une devise spécifique en utilisant l'API Intl.NumberFormat.
+ *
+ * Cette fonction prend un code de devise (par exemple "USD", "EUR") et retourne un objet
+ * Intl.NumberFormat configuré pour formater des nombres dans cette devise et selon les
+ * conventions locales associées à cette devise.
+ *
+ * @param {string} currency - Le code de la devise pour laquelle le formateur est créé.
+ * @returns {Intl.NumberFormat} Un nouvel objet Intl.NumberFormat configuré pour la devise spécifiée.
+ *
+ * @example
+ * // Création d'un formateur pour la devise USD
+ * const formatterUSD = GetFormatterForCurrency('USD');
+ * console.log(formatterUSD.format(123456.789)); // Affiche "$123,456.79" si en locale US
+ *
+ * @example
+ * // Création d'un formateur pour la devise EUR
+ * const formatterEUR = GetFormatterForCurrency('EUR');
+ * console.log(formatterEUR.format(123456.789)); // Affiche "123 456,79 €" si en locale FR
+ */
+export function GetFormatterForCurrency(currency: string): Intl.NumberFormat {
+    const locale = Currencies.find((c) => c.value === currency)?.locale;
+
+    return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency,
+    });
 }
 
 /**

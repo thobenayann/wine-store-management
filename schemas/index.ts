@@ -220,3 +220,12 @@ export const UpdateOrderStatusSchema = z.object({
 export type UpdateOrderStatusSchemaType = z.infer<
     typeof UpdateOrderStatusSchema
 >;
+
+// USER SETTINGS
+export const userSettingsSchema = z.object({
+    vat_rate: z.number().min(0).max(100),
+    payment_terms: z.number().min(0),
+    currency: z.string(),
+});
+
+export type UserSettingsFormValues = z.infer<typeof userSettingsSchema>;
